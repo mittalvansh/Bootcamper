@@ -2,7 +2,7 @@ import React from "react";
 import styles from './BootcampCard.module.scss';
 import Img from '../../assets/Demo.png';
 
-const BootcampCard = () => {
+const BootcampCard = ({ bootcamp }) => {
     return (
         <div className={styles.card}>
             <img 
@@ -14,13 +14,13 @@ const BootcampCard = () => {
             <div className={styles.details}>
                 <div className={styles.info}>
                     <div className={styles.name}>
-                        <p>ModernTech Bootcamp</p>
+                        <p>{bootcamp.name}</p>
                     </div>
                     <p className={styles.city}>
-                        Mumbai
+                        {bootcamp.location.city}
                     </p>
                     <p className={styles.career}>
-                        Web Development
+                        {bootcamp.careers[0]}
                     </p>
                     <div>
                         <span className={styles.text}>Publisher : </span>

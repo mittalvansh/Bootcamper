@@ -6,6 +6,7 @@
     border-radius: 8px;
     margin-inline: 10%;
     margin-top: 2rem;
+    margin-bottom: 0.5rem;
     box-shadow: 2px 0px 10px rgba(142, 140, 140, 0.5);
     transition: 0.1s ease-in-out;
     position: relative;
@@ -40,7 +41,7 @@
                 right: 0;
                 top: 0;
                 padding: 0.5rem 1rem;
-                border-radius: 0 8px 0 8px;
+                border-radius: 0 8px 0 0;
             }
     
             p{

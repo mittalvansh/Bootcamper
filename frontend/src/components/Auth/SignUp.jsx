@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useContext, useState} from "react";
 import styles from './SignUp.module.scss';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -10,6 +11,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import { ToastContainer, toast } from "react-toastify";
+import AuthContext from '../../context/Auth';
 
 const TextFieldStyle = {
     width: "100%",
@@ -30,6 +32,7 @@ const btnStyle = {
 }
 
 const SignUp = () => {
+    const { setUser } = useContext(AuthContext);
     const schema = yup
         .object({
             name: yup
@@ -50,6 +53,7 @@ const SignUp = () => {
         resolver: yupResolver(schema),
     });
 
+    const navigate = useNavigate();
     function notify(message) {
         toast(message, {
             position: "bottom-right",
@@ -59,8 +63,34 @@ const SignUp = () => {
         });
     }
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data, e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(
+                "https://bootcamper-6rl5.onrender.com/api/v1/auth/register",
+                data,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }                
+            );
+            console.log(response);
+            notify("Account Created!");
+            setUser({
+                isAuthenticated: true,
+                token: `Bearer ${response.data.token}`,
+            });
+            window.localStorage.setItem(
+                "token",
+                `Bearer ${response.data.token}`
+            );
+            setTimeout(() => {
+                navigate("/bootcamps");
+            }, 3500);
+        } catch (error) {
+            notify(error.response.data.error);
+        };
     }
 
     return (

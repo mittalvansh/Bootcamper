@@ -27,9 +27,25 @@
 form{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
 
-    .items{
-        margin: 0.5rem 0;
+    .searchBars{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .items{
+            margin-right: 1rem;
+        }
     }
 }
+
+@media only screen and (max-width: 810px){
+    form{
+        .searchBars{
+            flex-direction: column;
+        }
+    }
+}
+
