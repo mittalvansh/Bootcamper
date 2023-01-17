@@ -1,5 +1,3 @@
-@import '../../globalstyles/globals.scss';
-
 .text{
     display: flex;
     flex-direction: column;
@@ -45,6 +43,10 @@ form{
     form{
         .searchBars{
             flex-direction: column;
+
+            .items{
+                margin-bottom: 1rem;
+            }
         }
     }
 }

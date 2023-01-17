@@ -5,6 +5,8 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { Stack, TextField, Button } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -33,6 +35,7 @@ const btnStyle = {
 
 const SignUp = () => {
     const { setUser } = useContext(AuthContext);
+    const [isLoading, setIsLoading] = useState(false);
     const schema = yup
         .object({
             name: yup
@@ -65,6 +68,7 @@ const SignUp = () => {
 
     const onSubmit = async (data, e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const response = await axios.post(
                 "https://bootcamper-6rl5.onrender.com/api/v1/auth/register",
@@ -75,20 +79,22 @@ const SignUp = () => {
                     },
                 }                
             );
-            console.log(response);
             notify("Account Created!");
             setUser({
                 isAuthenticated: true,
                 token: `Bearer ${response.data.token}`,
+                userData: response.data.data,
             });
             window.localStorage.setItem(
                 "token",
                 `Bearer ${response.data.token}`
             );
             setTimeout(() => {
+                setIsLoading(false);
                 navigate("/bootcamps");
             }, 3500);
         } catch (error) {
+            setIsLoading(false);
             notify(error.response.data.error);
         };
     }
@@ -152,7 +158,11 @@ const SignUp = () => {
                             type="submit"
                             sx={btnStyle}
                         >
-                            Sign Up
+                            {isLoading ? (
+                                <FontAwesomeIcon icon={faSpinner} spin />
+                            ) : (
+                                "Sign Up"
+                            )}
                         </Button>
 
                         <div className={styles.link}>

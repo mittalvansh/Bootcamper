@@ -1,4 +1,14 @@
-@import '../../globalstyles/globals.scss';
+.spinner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    .loader{
+        width: 2rem;
+        height: 2rem;           
+    }
+}
 
 .wrapper{
     position: relative;
@@ -24,6 +34,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        padding: 1rem;
 
         img{
             width: 5rem;
@@ -57,6 +68,12 @@
             .bootcamp{
                 background-color: #262626;
                 margin-right: 0.5rem;
+
+                a{
+                    text-decoration: none;
+                    cursor: pointer;
+                    color: #fff;
+                }
             }
 
             .profile{

@@ -4,9 +4,11 @@ import {Box, TextField, MenuItem, Button} from '@mui/material';
 import Layout from "../../components/Layout/Layout"
 
 const btnStyle = {
+    width: "30%",
     fontSize: "1rem",
     fontWeight: "bold",
     fontFamily: "Poppins",
+    padding: "0.5rem 0",
     margin: "1rem 0",
     backgroundColor: "#262626",
     color: "white",
@@ -16,9 +18,8 @@ const btnStyle = {
 }
 
 const Home = () => {
-    const[city, setCity] = useState('');
-    const[career, setCareer] = useState('');
-    console.log(career);
+    const[distance, setDistance] = useState('');
+    const[zipcode, setZipcode] = useState('');
 
     return (
         <>
@@ -30,50 +31,37 @@ const Home = () => {
             <form>
                 <div className={styles.searchBars}>
                     <Box width='250px' className={styles.items}>
-                        <TextField 
-                            label='Select City' 
-                            select
-                            value={city}
+                        <TextField
+                            type='text'
+                            label='Miles From'
+                            name="distance"
+                            value={distance}
                             onChange={(event)=>{
-                                setCity(event.target.value);
+                                setDistance(event.target.value);
                             }}
-                            fullWidth
-                            color="secondary"
-                            helperText="Please select your city"
                             required
-                        >
-                            <MenuItem value='Dehli'>Dehli</MenuItem>
-                            <MenuItem value='Mumbai'>Mumbai</MenuItem>
-                            <MenuItem value='Bangalore'>Bangalore</MenuItem>
-                        </TextField>
+                        />
                     </Box>
                     <Box width='250px' className={styles.items}>
-                        <TextField 
-                            label='Select Career' 
-                            select
-                            value={career}
+                        <TextField
+                            type='text'
+                            label='Zipcode'
+                            name="zipcode"
+                            value={zipcode}
                             onChange={(event)=>{
-                                setCareer(event.target.value);
+                                setZipcode(event.target.value);
                             }}
-                            fullWidth
-                            color="secondary"
-                            helperText="Please select your career"
                             required
-                        >
-                            <MenuItem value='Web Development'>Web Development</MenuItem>
-                            <MenuItem value='UI/UX Design'>UI/UX Design</MenuItem>
-                            <MenuItem value='Marketing'>Marketing</MenuItem>
-                            <MenuItem value='Data Science'>Data Science</MenuItem>
-                        </TextField>
+                        />
                     </Box>
+                    <Button 
+                        variant="contained" 
+                        type="submit"
+                        sx={btnStyle}
+                    >
+                        Search
+                    </Button>
                 </div>
-                <Button 
-                    variant="contained" 
-                    type="submit"
-                    sx={btnStyle}
-                >
-                    Search
-                </Button>
             </form>
         </Layout>
         </>

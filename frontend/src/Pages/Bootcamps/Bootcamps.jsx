@@ -3,7 +3,7 @@ import styles from './Bootcamps.module.scss';
 import axios from 'axios';
 import BootcampCard from "../../components/BootcampCard/BootcampCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
+import { faFilter,faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { TextField, Button } from '@mui/material';
 import Layout from "../../components/Layout/Layout";
 
@@ -24,6 +24,7 @@ const Bootcamps = () => {
     const[distance, setDistance] = useState('');
     const[zipcode, setZipcode] = useState('');
     const[bootcamps, setBootcamps] = useState([]);
+    const[isLoading, setIsLoading] = useState(false);
 
     const getBootcamps = () => {
         const URL = 'https://bootcamper-6rl5.onrender.com/api/v1/bootcamps'
@@ -34,9 +35,11 @@ const Bootcamps = () => {
         axios
             .get(URL + QUERY)
             .then((response) => {
+                setIsLoading(false);
                 setBootcamps(response.data.data);
             })
             .catch((err) => {
+                setIsLoading(false);
                 console.log(err);
             });
     }
@@ -47,24 +50,29 @@ const Bootcamps = () => {
                 `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/radius/${zipcode}/${distance}`
             )
             .then((response) => {
+                setIsLoading(false);
                 setBootcamps(response.data.data);
             })
             .catch((err) => {
+                setIsLoading(false);
                 console.log(err);
             });
     } 
 
     useEffect(() => {
+        setIsLoading(true);
         getBootcamps();
     }, []);
 
     const handlefieldsSubmit = (e) => {
         e.preventDefault();
+        setIsLoading(true);
         getBootcamps();
     }
 
     const handleLocationSubmit = (e) => {
         e.preventDefault();
+        setIsLoading(true);
         getBootcampsByDistance();
     }
 
@@ -133,9 +141,16 @@ const Bootcamps = () => {
                     </form>
                 </div>
                 <div className={styles.rightSide}>
-                    {bootcamps.map((bootcamp) => {
-                        return <BootcampCard bootcamp={bootcamp} key={bootcamp._id} />;
-                    })}
+                    {isLoading ? (
+                        <div className={styles.spinner}>
+                            <FontAwesomeIcon icon={faSpinner} spin className={styles.loader}/>
+                        </div>
+                    ) : (
+                        bootcamps.map((bootcamp) => {
+                            return <BootcampCard bootcamp={bootcamp} key={bootcamp._id} />;
+                        })
+                    )}
+
                 </div>
             </div>
         </Layout>

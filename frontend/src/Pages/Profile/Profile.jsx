@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Layout from "../../components/Layout/Layout";
 import styles from './Profile.module.scss';
 import Background from '../../assets/Background.jpg';
 import Avatar from '../../assets/Avatar.png';
 import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import AuthContext from "../../context/Auth";
+import ProtectedRoute from "../../components/ProtectedRoute"
 
 const btnStyle = {
     fontSize: "0.8rem",
@@ -13,8 +16,11 @@ const btnStyle = {
 }
 
 const Profile = () => {
+    const { user } = useContext(AuthContext);
+    const data = user.userData;
+
     return (
-        <>
+        <ProtectedRoute>
             <Layout>
                 <div className={styles.wrapper}>
                     <img 
@@ -22,42 +28,49 @@ const Profile = () => {
                         alt=""
                     />
                     <p className={styles.role}>
-                        Publisher
+                        {data && data.role}
                     </p>
                     <div className={styles.details}>
                         <img src={Avatar} alt="" />
-                        <p className={styles.name}>Vansh Mittal</p>
-
+                        <p className={styles.name}>
+                            {data && data.name}
+                        </p>
                         <div className={styles.items}>
                             <span className={styles.text}>Email : </span>
-                            <span>mittalvansh69@gmail.com</span>
+                            <span>
+                                {data && data.email}
+                            </span>
                         </div>
                         <div className={styles.items}>
                             <span className={styles.text}>Member Since : </span>
-                            <span>Tue Jan 10 2023</span>
+                            <span>
+                                {data && data.createdAt.slice(0, 10)}
+                            </span>
                         </div>
-                        <div className={styles.btn}>
-                            <Button 
-                                variant="contained" 
-                                type="submit"
-                                className={styles.bootcamp}
-                                sx={btnStyle}
-                            >
-                                Create BootCamp
-                            </Button>
-                            <Button 
-                                variant="contained" 
-                                type="submit"
-                                sx={btnStyle}
-                                className={styles.profile}
-                            >
-                                Edit Profile
-                            </Button>
-                        </div>
+                        {data && data.role === "publisher" &&
+                            <div className={styles.btn}>
+                                <Button 
+                                    variant="contained" 
+                                    type="submit"
+                                    className={styles.bootcamp}
+                                    sx={btnStyle}
+                                >
+                                    <Link to='/createbootcamp'>Create BootCamp</Link>
+                                </Button>
+                                <Button 
+                                    variant="contained" 
+                                    type="submit"
+                                    sx={btnStyle}
+                                    className={styles.profile}
+                                >
+                                    Edit Profile
+                                </Button>
+                            </div>
+                        }
                     </div>
                 </div>
             </Layout>
-        </>
+        </ProtectedRoute>
     );
 }
 

@@ -1,12 +1,47 @@
-import React, {useState} from "react";
+import axios from "axios";
+import React, {useEffect, useState} from "react";
 
 const AuthContext = React.createContext();
 
 export const AuthProvider = (props) => {
     const [user, setUser] = useState({
-        isAuthenticated: false,
+        isAuthenticated: null,
         token: null,
+        userData: null,
     });
+    const getUser = async () => {
+        const token = await window.localStorage.getItem("token");
+        try{
+            if(token){
+                const response = await axios.get(
+                    "https://bootcamper-6rl5.onrender.com/api/v1/auth/me",
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": token,
+                        },
+                    }
+                )
+
+                setUser({
+                    isAuthenticated: true,
+                    token: token,
+                    userData: response.data.data,
+                });
+            }
+        } catch (error) {
+            if(error.response.status === 401){
+                setUser({
+                    isAuthenticated: false,
+                    token: null,
+                    userData: null,
+                });
+            }
+        }
+    }
+    useEffect( () => {
+        getUser();
+    }, []);
 
     return (
         <AuthContext.Provider

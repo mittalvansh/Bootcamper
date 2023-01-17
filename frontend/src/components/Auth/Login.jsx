@@ -5,6 +5,8 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { Stack, TextField, Button } from '@mui/material';
 import { ToastContainer, toast } from "react-toastify";
 import AuthContext from '../../context/Auth';
@@ -30,6 +32,7 @@ const btnStyle = {
 
 const Login = () => {
     const { setUser } = useContext(AuthContext);
+    const [isLoading, setIsLoading] = useState(false);
     const schema = yup
         .object({
             email: yup
@@ -57,6 +60,7 @@ const Login = () => {
 
     const onSubmit = async (data, e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const response = await axios.post(
                 "https://bootcamper-6rl5.onrender.com/api/v1/auth/login",
@@ -71,16 +75,19 @@ const Login = () => {
             notify("Logged in successfully!");
             setUser({
                 isAuthenticated: true,
-                token: await `Bearer ${response.data.token}`,
+                token: `Bearer ${response.data.token}`,
+                userData: response.data.data,
             });
             await window.localStorage.setItem(
                 "token",
                 `Bearer ${response.data.token}`
             );
             setTimeout(() => {
+                setIsLoading(false);
                 navigate("/bootcamps");
             }, 3500);
         } catch (error) {
+            setIsLoading(false);
             notify(error.response.data.error);
         };
     }
@@ -115,7 +122,11 @@ const Login = () => {
                             type="submit"
                             sx={btnStyle}
                         >
-                            Sign In
+                            {isLoading ? (
+                                <FontAwesomeIcon icon={faSpinner} spin />
+                            ) : (
+                                "Login"
+                            )}
                         </Button>
                         <div className={styles.link}>
                             <p>

@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.scss';
 import "react-toastify/dist/ReactToastify.css";
 import { Routes, Route } from 'react-router-dom';
 import Home from './Pages/Home/Home'
@@ -7,6 +8,7 @@ import SignUp from './components/Auth/SignUp';
 import Bootcamps from './Pages/Bootcamps/Bootcamps';
 import Profile from './Pages/Profile/Profile';
 import CreateBootcamp from './Pages/CreateBootcamp/CreateBootcamp';
+import BootcampProfile from './Pages/BootcampProfile/BootcampProfile';
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
       <Route path="/bootcamps" element={<Bootcamps />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/createbootcamp" element={<CreateBootcamp />} />
+      <Route path="/bootcamp-profile/:id" element={<BootcampProfile />} />
     </Routes>
   )
 }

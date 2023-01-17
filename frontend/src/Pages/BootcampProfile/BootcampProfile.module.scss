@@ -1,0 +1,106 @@
+.spinner {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+
+    .loader {
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100vw;
+    height: 100vh;
+    padding: 2rem;
+
+    .bootcampDetails{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin-right: 1rem;
+
+        p{
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #262626;
+        }
+
+        .description{
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #262626;
+            text-align: justify;
+        }
+
+        .averageCost{
+            margin-top: 1rem;
+
+            .text{
+                font-size: 1.2rem;
+                font-weight: 400;
+                color: #262626;
+            }
+
+            .cost{
+                font-size: 1.2rem;
+                font-weight: 300;
+                color: red;
+            }
+        }
+
+        .averageRating{
+            margin-top: 0.5rem;
+            margin-bottom: 4rem;
+            
+            .ratingText{
+                font-size: 1.2rem;
+                font-weight: 400;
+                color: #262626;
+            }
+
+            .ratingValue{
+                font-size: 1.2rem;
+                font-weight: 300;
+                color: red;
+            }
+        }
+    }
+
+    .otherDetails{
+        .bootcampImage{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-radius: 10px;
+            padding: 2px;
+
+            img{
+                width:24rem;
+                height: 18rem;
+                border-radius: 8px;
+            }
+        }
+
+        .review{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+
+            .icon{
+                font-size: 1.2rem;
+            }
+
+            .text{
+                margin-left: 0.4rem;
+                font-size: 1.2rem;
+            }
+        }
+    }
+}
