@@ -5,7 +5,13 @@ import Image from "../../assets/Demo.png";
 import CourseCard from "../../components/CourseCard/CourseCard";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner,faPen } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner,
+    faPen,
+    faComments,
+    faGlobe,
+    faCheck,
+    faClose,
+} from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import { Button } from '@mui/material';
 
@@ -16,12 +22,6 @@ const btnStyle = {
     fontFamily: "Poppins",
     marginBottom: "0.5rem",
     marginTop: "1.5rem",
-    backgroundColor: "#262626",
-
-    color: "white",
-    "&:hover": {
-        backgroundColor: "#000",
-    }
 }
 
 
@@ -66,8 +66,8 @@ const BootcampProfile = () => {
     },[]);
 
     return (
-        <>
         <Layout>
+        <>
             {isLoading ? (
                 <div className={styles.spinner}>
                     <FontAwesomeIcon icon={faSpinner} spin className={styles.loader}/>
@@ -97,8 +97,18 @@ const BootcampProfile = () => {
                             variant="contained" 
                             type="submit"
                             sx={btnStyle}
+                            style={{
+                                backgroundColor: "#262626",
+                            }}
                         >
-                            Read Reviews
+                            <span>
+                                <FontAwesomeIcon 
+                                    icon={faComments} 
+                                    style={{
+                                        marginRight: "0.5rem",
+                                    }}/>
+                            </span>
+                            <span>Read Reviews</span>
                         </Button>
                         <div className={styles.review}>
                             <span className={styles.icom}>
@@ -106,11 +116,78 @@ const BootcampProfile = () => {
                             </span>
                             <span className={styles.text}>Write a Review</span>
                         </div>
+                        <div className={styles.website}>
+                            <a 
+                                href={bootcamp.website}
+                                style={{
+                                    "textDecoration":"none"
+                                }}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faGlobe}
+                                    style={{
+                                        marginRight: "0.5rem",
+                                        color: "#fff",
+                                    }}
+                                />
+                                <span className={styles.text}>View Website</span>
+                            </a>
+                        </div>
+                        <div className={styles.otherdetails}>
+                            <div className={styles.detail}>
+                                <span className={styles.text}>Housing : </span>    
+                                {bootcamp.housing ? (
+                                    <span>
+                                        <FontAwesomeIcon icon={faCheck} color='green'/>
+                                    </span>
+                                ):(
+                                    <span>
+                                        <FontAwesomeIcon icon={faClose} color='red'/>
+                                    </span>
+                                )}                        
+                            </div>
+                            <div className={styles.detail}>
+                                <span>Job Assistance : </span>
+                                {bootcamp.jobAssistance ? (
+                                    <span>
+                                        <FontAwesomeIcon icon={faCheck} color='green'/>
+                                    </span>
+                                ):(
+                                    <span>
+                                        <FontAwesomeIcon icon={faClose} color='red'/>
+                                    </span>
+                                )}
+                            </div>
+                            <div className={styles.detail}>
+                                <span>Job Guarantee : </span>
+                                {bootcamp.jobGuarantee ? (
+                                     <span>
+                                        <FontAwesomeIcon icon={faCheck} color='green'/>
+                                    </span>
+                                ):(
+                                    <span>
+                                        <FontAwesomeIcon icon={faClose} color='red'/>
+                                    </span>
+                                )}
+                            </div>
+                            <div className={styles.detail}>
+                                <span>Accepts Gi Bill : </span>
+                                {bootcamp.acceptGi ? (
+                                    <span>
+                                    <FontAwesomeIcon icon={faCheck} color='green'/>
+                                    </span>
+                                ):(
+                                    <span>
+                                        <FontAwesomeIcon icon={faClose} color='red'/>
+                                    </span>
+                                )}
+                            </div>        
+                        </div>
                     </div>
                 </div>
             )}
-        </Layout>
         </>
+        </Layout>
     )
 }
 

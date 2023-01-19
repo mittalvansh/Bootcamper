@@ -15,14 +15,14 @@
     align-items: flex-start;
     width: 100vw;
     height: 100vh;
-    padding: 2rem;
+    padding: 2rem 7rem;
 
     .bootcampDetails{
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
-        margin-right: 1rem;
+        margin-right: 2rem;
 
         p{
             font-size: 1.8rem;
@@ -34,7 +34,8 @@
             font-size: 1.2rem;
             font-weight: 400;
             color: #262626;
-            text-align: justify;
+            text-align: start;
+            padding-right: 5rem;
         }
 
         .averageCost{
@@ -81,7 +82,7 @@
             padding: 2px;
 
             img{
-                width:24rem;
+                width: 24rem;
                 height: 18rem;
                 border-radius: 8px;
             }
@@ -91,15 +92,94 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
 
             .icon{
-                font-size: 1.2rem;
+                font-size: 0.8rem;
             }
 
             .text{
+                font-size: 1rem;
                 margin-left: 0.4rem;
+                cursor: pointer;
+            }
+        }
+
+        .website{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #5A5A5A;
+            padding: 0.35rem 1rem;
+            border-radius: 4px;
+            margin: 1rem 0 0.5rem 0;
+            cursor: pointer;
+
+            .text{
                 font-size: 1.2rem;
+                font-weight: 600;
+                color: #fff;
+            }
+        }
+
+        .otherdetails{
+            margin: 2rem 0;
+            width: 100%;
+            
+            .detail{
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                padding: 0.5rem;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1000px){
+    .container{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+
+        .bootcampDetails{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-inline: 1rem;
+            margin-right: 0 !important;
+
+            p{
+                font-size: 1.4rem;
+                font-weight: 500;
+                text-align: center;
+            }
+
+            .description{
+                font-size: 1rem;
+                text-align: center;
+                padding: 0 !important;
+            }
+        }
+
+        .otherDetails{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-inline: 1rem;
+
+            .bootcampImage{
+                img{
+                    width: 20rem;
+                    height: 15rem;
+                }
+            }
+
+            .website{
+                width: 100%;
+            }
+
+            .otherdetails{
+                width: 100%;
             }
         }
     }

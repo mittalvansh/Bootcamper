@@ -33,6 +33,7 @@
         }
 
         .description{
+            padding-right: 0.2rem;
             margin-top: 1rem;
             font-size: 1rem;
             font-weight: 400;
@@ -48,5 +49,11 @@
                 padding: 0.5rem;
             }
         }
+    }
+}
+
+@media only screen and (min-width: 1000px){
+    .card{
+        width: 100%;
     }
 }
