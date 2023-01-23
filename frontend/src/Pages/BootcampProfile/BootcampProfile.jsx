@@ -1,8 +1,9 @@
-import React,{useState, useEffect} from "react";
+import React,{useState, useEffect, useContext} from "react";
 import styles from './BootcampProfile.module.scss';
 import Layout from "../../components/Layout/Layout";
 import Image from "../../assets/Demo.png";
 import CourseCard from "../../components/CourseCard/CourseCard";
+import ReviewCard from "../../components/ReviewCard/ReviewCard";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner,
@@ -11,25 +12,66 @@ import { faSpinner,
     faGlobe,
     faCheck,
     faClose,
+    faTrash,
+    faPlus
 } from "@fortawesome/free-solid-svg-icons";
-import { useParams } from "react-router-dom";
-import { Button } from '@mui/material';
+import { useParams, Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { Button, 
+    Dialog, 
+    DialogActions, 
+    DialogContent, 
+    DialogTitle,
+    Radio,
+    RadioGroup,
+    FormControlLabel,
+    FormLabel,
+} from "@mui/material";
+import AuthContext from "../../context/Auth";
 
 const btnStyle = {
     width: "100%",
     fontSize: "1rem",
     fontWeight: "bold",
     fontFamily: "Poppins",
-    marginBottom: "0.5rem",
-    marginTop: "1.5rem",
+    backgroundColor: "#262626",
+    color: "white",
+    "&:hover": {
+        backgroundColor: "#262626",
+    }
 }
 
 
 const BootcampProfile = () => {
     const { id } = useParams();
+    const { user } = useContext(AuthContext);
     const[bootcamp, setBootcamp] = useState({});
     const[courses, setCourses] = useState([]);
-    const[isLoading, setIsLoading] = useState(false);
+    const[reviews, setReviews] = useState([]);
+    const[isOpen, setIsOpen] = useState({
+        readReview: false,
+        writeReview: false,
+        addCourse: false,
+    });
+    const[rating, setRating] = useState(1);
+    const[title, setTitle] = useState({
+        addCourse: "",
+        writeReview: "",
+    });
+    const [description, setDescription] = useState({
+        addCourse: "",
+        writeReview: "",
+    });
+    const [weeks, setWeeks] = useState("");
+    const [price, setPrice] = useState("");
+    const [minimumSkill, setMinimumSkill] = useState("");
+    const [scholarshipAvailable, setScholarshipAvailable] = useState(null);
+    const [isLoading, setIsLoading] = useState({
+        page: false,
+        review: false,
+        delete: false,
+        addCourse: false,
+    });
 
     const getBootcamp = () => {
         axios
@@ -37,11 +79,12 @@ const BootcampProfile = () => {
                 `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}`
             )
             .then((res) => {
-                setIsLoading(false);
+                setIsLoading({ ...isLoading, page: false });
                 setBootcamp(res.data.data);
             })
             .catch((err) => {
-                setIsLoading(false);
+                setIsLoading({ ...isLoading, page: false });
+                setBootcamp(res.data.data);
                 console.log(err);
             });
     }
@@ -59,16 +102,184 @@ const BootcampProfile = () => {
             })
     }
 
+    const getReviews = () => {
+         axios
+            .get(
+                `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/reviews`
+            )
+            .then((response) => {
+                setReviews(response.data.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+ 
+    function notify(message) {
+        toast(message, {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            progress: undefined,
+        });
+    }
+
+    const handleDelete = async(e) => {
+        e.preventDefault();
+        setIsLoading({
+            ...isLoading,
+            delete: true
+        });
+        try {
+            const response = await axios.delete(
+                `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": user.token
+                    }
+                }
+            );
+            if(response.status === 200) {
+                setIsLoading({
+                    ...isLoading,
+                    delete: false
+                });
+                notify("Bootcamp deleted successfully");
+            }
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 3000);
+        } catch (error) {
+            setIsLoading({
+                ...isLoading,
+                delete: false
+            });
+            notify("Something went wrong");
+        }
+    }    
+
+    const handleReview = async(e) => {
+        e.preventDefault();
+        setIsLoading({
+            ...isLoading,
+            review: true
+        });
+
+        const data = {
+            "title": title.writeReview,
+            "text": description.writeReview,
+            "rating": rating
+        }
+
+        if(!rating || !title || !description.writeReview) {
+            toast.error("Please fill all the fields");
+        }
+
+        else if(user.userData.role !== "user") {
+            toast.error("Only users can add reviews");
+        }
+
+        try {
+            const response = await axios.post(
+                `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/reviews`,
+                data,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": user.token
+                    }
+                }
+            );
+            if(response.status === 201) {
+                setIsLoading({
+                    ...isLoading,
+                    review: false
+                });
+                notify("Review added successfully");
+            }
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        } catch (error) {
+            setIsLoading({
+                ...isLoading,
+                review: false
+            });
+            notify("Something went wrong");
+        }
+    }
+
+    const handleCourse = async(e) => {
+        e.preventDefault();
+        setIsLoading({
+            ...isLoading,
+            addCourse: true
+        })
+
+        const data = {
+            "title": title.addCourse,
+            "description": description.addCourse,
+            "weeks": weeks,
+            "tuition": price,
+            "minimumSkill": minimumSkill,
+            "scholarshipAvailable": scholarshipAvailable,
+        }
+
+        if(!title.addCourse || !description.addCourse || !weeks || !price || !minimumSkill || !scholarshipAvailable) {
+            toast.error("Please fill all the fields");
+        }
+
+        if(user.userData && bootcamp.user !== user.userData._id){
+            toast.error("You are not authorized to add courses to this bootcamp");
+        }
+
+        try {
+            const response = await axios.post(
+                `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/courses`,
+                data,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": user.token
+                    }
+                }
+            );
+            console.log(response);
+            if(response.status === 201) {
+                setIsLoading({
+                    ...isLoading,
+                    addCourse: false
+                });
+                notify("Course added successfully");
+            }
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        } catch (error) {
+            setIsLoading({
+                ...isLoading,
+                addCourse: false
+            });
+            notify(error.response.data.message);
+        }
+    }
+
     useEffect(() => {
-        setIsLoading(true);
+        setIsLoading({
+            ...isLoading,
+            page: true
+        });
         getBootcamp();
         getCourses();
+        getReviews();
     },[]);
 
     return (
-        <Layout>
         <>
-            {isLoading ? (
+        <ToastContainer toastStyle={{ backgroundColor: "#262626", color: "#fff" }}/>
+        <Layout>
+            {isLoading.page ? (
                 <div className={styles.spinner}>
                     <FontAwesomeIcon icon={faSpinner} spin className={styles.loader}/>
                 </div>
@@ -77,45 +288,460 @@ const BootcampProfile = () => {
                     <div className={styles.bootcampDetails}>
                         <p>{bootcamp.name}</p>
                         <p className={styles.description}>{bootcamp.description}</p>
-                        <div className={styles.averageCost}>
-                            <span className={styles.text}>Average Course Cost : </span>
-                            <span className={styles.cost}>{bootcamp.averageCost}</span>
+                        {courses.length === 0 ? (
+                            <div className={styles.noCourses}>
+                                <p>No courses available</p>
+                            </div>
+                        ) : (
+                            <>
+                                <div className={styles.averageCost}>
+                                    <span className={styles.text}>Average Course Cost : </span>
+                                    <span className={styles.cost}>{bootcamp.averageCost}</span>
+                                </div>
+                                <div className={styles.averageRating}>
+                                    <span className={styles.ratingText}>Rating : </span>
+                                    <span className={styles.ratingValue}>{bootcamp.averageRating}</span>
+                                </div>
+                                {courses.map((course) => {
+                                    return <CourseCard course={course} key={course._id}/>;
+                                })}
+                            </>
+                        )}
+                        <div>
+                            <Button
+                                variant="contained" 
+                                type="submit"
+                                sx={btnStyle}
+                                style={{
+                                    margin: "1rem 0",
+                                }}
+                                onClick={() => {
+                                    setIsOpen({
+                                        ...isOpen,
+                                        addCourse: true
+                                    })
+                                }}
+                            >
+                                <span className={styles.icon}>
+                                    <FontAwesomeIcon icon={faPlus} />
+                                </span>
+                                <span>
+                                    Add Course
+                                </span>
+                            </Button>
                         </div>
-                        <div className={styles.averageRating}>
-                            <span className={styles.ratingText}>Rating : </span>
-                            <span className={styles.ratingValue}>{bootcamp.averageRating}</span>
-                        </div>
-                        {courses.map((course) => {
-                            return <CourseCard course={course} key={course._id}/>;
-                        })}
+                        <Dialog
+                            open={isOpen.addCourse}
+                            onClose={() => {
+                                setIsOpen({
+                                    ...isOpen,
+                                    addCourse: false
+                                })
+                            }}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {"Add Course"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <form
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        padding: "1rem",
+                                        gap: "1rem",
+                                    }} 
+                                    onSubmit={handleCourse}
+                                >
+                                    <div 
+                                        style={{
+                                            width: "100%",
+                                        }}
+                                    >
+                                        <input
+                                            value={title.addCourse}
+                                            onChange={(e) => {
+                                                setTitle({
+                                                    ...title,
+                                                    addCourse: e.target.value 
+                                                })
+                                            }}
+                                            type="text" 
+                                            name="title" 
+                                            placeholder="Review Title"
+                                            style={{
+                                                width: "100%",
+                                                fontSize: "1rem",
+                                                padding: "0.5rem",
+                                            }} 
+                                        />
+                                    </div>
+                                    <div>
+                                        <textarea
+                                            value={description.addCourse}
+                                            onChange={(e) => {
+                                                setDescription({
+                                                    ...description,
+                                                    addCourse: e.target.value
+                                                })
+                                            }}
+                                            name="description"
+                                            spellCheck="false"
+                                            cols="40"
+                                            rows="10"
+                                            placeholder="Your Review"
+                                            style={{
+                                                width:"100%",
+                                                fontSize: "1rem",
+                                                padding: "0.5rem",
+                                                borderRadius: "4px",
+                                            }}
+                                        />
+                                    </div>
+                                    <div 
+                                        style={{
+                                            width: "100%",
+                                        }}
+                                    >
+                                        <input
+                                            value={weeks}
+                                            onChange={(e) => {
+                                                setWeeks(e.target.value)
+                                            }}
+                                            type="text" 
+                                            name="weeks" 
+                                            placeholder="Weeks"
+                                            style={{
+                                                width: "100%",
+                                                fontSize: "1rem",
+                                                padding: "0.5rem",
+                                            }} 
+                                        />
+                                    </div>
+                                    <div
+                                        style={{
+                                            width: "100%",
+                                        }}
+                                    >
+                                        <input
+                                            value={price}
+                                            onChange={(e) => {
+                                                setPrice(e.target.value)
+                                            }}
+                                            type="text" 
+                                            name="tuition" 
+                                            placeholder="Tuition"
+                                            style={{
+                                                width: "100%",
+                                                fontSize: "1rem",
+                                                padding: "0.5rem",
+                                            }} 
+                                        />
+                                    </div>
+                                    <div
+                                        style={{
+                                            width: "100%",
+                                        }}
+                                    >
+                                        <FormLabel>
+                                            Minimum Skill
+                                        </FormLabel>
+                                        <RadioGroup 
+                                            value={minimumSkill}
+                                            onChange={(e) => {
+                                                setMinimumSkill(e.target.value)
+                                            }}
+                                            row
+                                        >
+                                            <FormControlLabel
+                                                value="beginner"
+                                                control={<Radio />}
+                                                label="Beginner"
+                                            />
+                                            <FormControlLabel
+                                                value="intermediate"
+                                                control={<Radio />}
+                                                label="Intermediate"
+                                            />
+                                            <FormControlLabel
+                                                value="advanced"
+                                                control={<Radio />}
+                                                label="Advanced"
+                                            />
+                                        </RadioGroup>   
+                                    </div>
+                                    <div
+                                        style={{
+                                            width: "100%",
+                                        }}
+                                    >
+                                        <FormLabel>
+                                            Scholarship Available
+                                        </FormLabel>
+                                        <RadioGroup 
+                                            value={scholarshipAvailable}
+                                            onChange={(e) => {
+                                                setScholarshipAvailable(e.target.value)
+                                            }}
+                                            row
+                                        >
+                                            <FormControlLabel
+                                                value="true"
+                                                control={<Radio />}
+                                                label="Yes"
+                                            />
+                                            <FormControlLabel
+                                                value="false"
+                                                control={<Radio />}
+                                                label="No"
+                                            />
+                                        </RadioGroup>
+                                    </div>
+                                    <Button
+                                        variant="contained" 
+                                        sx={btnStyle}
+                                        type="submit"
+                                    >
+                                        {isLoading.addCourse ? (
+                                            <FontAwesomeIcon icon={faSpinner} spin />
+                                        ) : (
+                                            "Add Course"
+                                        )}
+                                    </Button>
+                                </form>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button
+                                    onClick={() => {
+                                        setIsOpen({
+                                            ...isOpen,
+                                            addCourse: false
+                                        })
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                     </div>
                     <div className={styles.otherDetails}>
                         <div className={styles.bootcampImage}>
                             <img src={Image} alt="" />
                         </div>
-                        <Button 
-                            variant="contained" 
-                            type="submit"
-                            sx={btnStyle}
-                            style={{
-                                backgroundColor: "#262626",
+                        {reviews.length !== 0 && (
+                        <>
+                            <Button
+                                variant="contained" 
+                                sx={btnStyle}
+                                onClick={() => {
+                                    setIsOpen({
+                                        ...isOpen,
+                                        readReview: true
+                                    })
+                                }}
+                                style={{
+                                    margin: "1rem 0 0.5rem 0",
+                                }}
+                            >
+                                <span>
+                                    <FontAwesomeIcon 
+                                        icon={faComments} 
+                                        style={{
+                                            marginRight: "0.5rem",
+                                        }}/>
+                                </span>
+                                <span>
+                                    Read Reviews
+                                </span>
+                            </Button>
+                            <Dialog
+                                open={isOpen.readReview}
+                                onClose={() => {
+                                    setIsOpen({
+                                        ...isOpen,
+                                        readReview: false
+                                    })
+                                }}
+                                aria-labelledby='dialog-title'
+                                aria-describedby='dialog-description'
+                            >
+                                <DialogTitle
+                                    id='dialog-title'
+                                >
+                                    Bootcamp Reviews
+                                </DialogTitle>
+                                <DialogContent>
+                                    {reviews.map((review) => {
+                                        return <ReviewCard review={review} key={review._id}/>;
+                                    })}
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button
+                                        onClick={() => {
+                                            setIsOpen({
+                                                ...isOpen,
+                                                readReview: false
+                                            })
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+                        </>
+                        )}
+                        <div 
+                            className={styles.review}
+                            onClick={() => {
+                                setIsOpen({
+                                    ...isOpen,
+                                    writeReview: true
+                                })
                             }}
                         >
-                            <span>
+                            <span className={styles.icon}>
                                 <FontAwesomeIcon 
-                                    icon={faComments} 
+                                    icon={faPen} 
                                     style={{
                                         marginRight: "0.5rem",
-                                    }}/>
-                            </span>
-                            <span>Read Reviews</span>
-                        </Button>
-                        <div className={styles.review}>
-                            <span className={styles.icom}>
-                                <FontAwesomeIcon icon={faPen} />
+                                    }}
+                                />
                             </span>
                             <span className={styles.text}>Write a Review</span>
                         </div>
+                        <Dialog
+                            open={isOpen.writeReview}
+                            onClose={() => {
+                                setIsOpen({
+                                    ...isOpen,
+                                    writeReview: false
+                                })
+                            }}
+                            aria-labelledby='dialog-title'
+                            aria-describedby='dialog-description'
+                        >
+                            <DialogTitle  id='dialog-title'>
+                                Write a Review
+                            </DialogTitle>
+                            <DialogContent>
+                                <form
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        padding: "1rem",
+                                        gap: "1rem",
+                                    }}
+                                    onSubmit={handleReview}
+                                >
+                                    <div 
+                                        className={styles.rating}
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            gap: "0.5rem",
+                                            width: "100%",
+                                        }}
+                                    >
+                                        <div>
+                                            <span
+                                                style={{
+                                                    fontSize: "1.2rem",
+                                                    fontWeight: "500",
+                                                }}
+                                            >Rating : </span>
+                                            <span
+                                                style={{
+                                                    fontSize: "1.2rem",
+                                                    fontWeight: "500",
+                                                    color: "#5A5A5A",
+                                                }}
+                                            >
+                                                {rating}
+                                            </span>
+                                        </div>
+                                        <input
+                                            value={rating}
+                                            onChange={(e) => {
+                                                setRating(e.target.value)
+                                            }}
+                                            type="range"
+                                            name="rating"
+                                            min="1"
+                                            max="10"
+                                            step="1"
+                                        />
+                                    </div>
+                                    <div 
+                                        style={{
+                                            width: "100%",
+                                        }}
+                                    >
+                                        <input
+                                            value={title.writeReview}
+                                            onChange={(e) => {
+                                                setTitle({
+                                                    ...title,
+                                                    writeReview: e.target.value
+                                                })
+                                            }}
+                                            type="text" 
+                                            name="title" 
+                                            placeholder="Review Title"
+                                            style={{
+                                                width: "100%",
+                                                fontSize: "1rem",
+                                                padding: "0.5rem"
+                                            }} 
+                                        />
+                                    </div>
+                                    <div>
+                                        <textarea
+                                            value={description.writeReview}
+                                            onChange={(e) => {
+                                                setDescription({
+                                                    ...description,
+                                                    writeReview: e.target.value
+                                                })
+                                            }}
+                                            name="review"
+                                            spellCheck="false"
+                                            cols="40"
+                                            rows="10"
+                                            placeholder="Your Review"
+                                            style={{
+                                                width:"100%",
+                                                fontSize: "1rem",
+                                                padding: "0.5rem"
+                                            }}
+                                        />
+                                    </div>
+                                    <Button
+                                        variant="contained" 
+                                        sx={btnStyle}
+                                        type="submit"
+                                    >
+                                        {isLoading.review ? (
+                                            <FontAwesomeIcon icon={faSpinner} spin />
+                                        ) : (
+                                            "Submit Review"
+                                        )}
+                                    </Button>
+                                </form>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button
+                                    onClick={() => {
+                                        setIsOpen({
+                                            ...isOpen,
+                                            writeReview: false
+                                        })
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                         <div className={styles.website}>
                             <a 
                                 href={bootcamp.website}
@@ -183,11 +809,33 @@ const BootcampProfile = () => {
                                 )}
                             </div>        
                         </div>
+                        {user.userData && bootcamp.user === user.userData._id && (
+                            <Button
+                                variant="contained" 
+                                sx={btnStyle}
+                                type="submit"
+                                onClick={() => {
+                                    handleDelete()
+                                }}
+                            >
+                                {isLoading.delete ? (
+                                    <FontAwesomeIcon icon={faSpinner} spin />
+                                    ) : (
+                                    <>
+                                        <FontAwesomeIcon icon={faTrash} style={{
+                                            marginRight: "0.5rem",
+                                        }}
+                                    />
+                                        <span>Delete Bootcamp</span>
+                                    </>
+                                )}
+                            </Button>
+                        )}
                     </div>
                 </div>
             )}
-        </>
         </Layout>
+        </>
     )
 }
 

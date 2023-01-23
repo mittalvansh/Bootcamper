@@ -71,7 +71,6 @@ const Login = () => {
                     },
                 }
             );
-            console.log(response);
             notify("Logged in successfully!");
             setUser({
                 isAuthenticated: true,

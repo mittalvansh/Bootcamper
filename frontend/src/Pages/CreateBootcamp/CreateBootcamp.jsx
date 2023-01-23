@@ -12,6 +12,8 @@ import ProtectedRoute from "../../components/ProtectedRoute"
 import { useForm } from "react-hook-form";
 import AuthContext from "../../context/Auth";
 import { ToastContainer, toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 const TextFieldStyle = {
@@ -20,8 +22,8 @@ const TextFieldStyle = {
 
 const CreateBootcamp = () => {
     const { user } = useContext(AuthContext);
-    const[careers, setCareers] = useState([]);
-    const[data, setData] = useState([]);
+    const [careers, setCareers] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const { register, handleSubmit, reset } = useForm();
 
     const navigate = useNavigate();
@@ -36,6 +38,7 @@ const CreateBootcamp = () => {
 
     const onSubmit = async (data, e) => {
         e.preventDefault();
+        setIsLoading(true);
         data.careers = careers;
         try{
             const response = await axios.post(
@@ -48,20 +51,22 @@ const CreateBootcamp = () => {
                     },
                 }
             );
-            console.log(response);
             if(response.status === 201){
+                setIsLoading(false);
                 notify("Bootcamp Created!");
                 setTimeout(() => {
                     navigate("/bootcamps");
                 }, 3500);
             }
         } catch (error) {
+            setIsLoading(false);
             notify(error.response.data.error);
         }
     }
 
     return (
         <ProtectedRoute>
+            <ToastContainer toastStyle={{ backgroundColor: "#262626", color: "#fff" }}/>
             <Layout>
                 <div className={styles.wrapper}>
                     <div>
@@ -270,7 +275,15 @@ const CreateBootcamp = () => {
                                         marginTop: "20px",
                                     }}
                                 >
-                                    Submit
+                                    {isLoading ? (
+                                        <FontAwesomeIcon 
+                                            icon={faSpinner} 
+                                            style={{color: "#fff", fontSize: "20px"}}
+                                            spin 
+                                        />
+                                    ) : (
+                                        "Submit"
+                                    )}
                                 </Button>
                             </div>    
                         </div>
