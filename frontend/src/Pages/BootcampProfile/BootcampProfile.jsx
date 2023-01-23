@@ -15,7 +15,7 @@ import { faSpinner,
     faTrash,
     faPlus
 } from "@fortawesome/free-solid-svg-icons";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Button, 
     Dialog, 
@@ -72,6 +72,7 @@ const BootcampProfile = () => {
         delete: false,
         addCourse: false,
     });
+    const navigate = useNavigate();
 
     const getBootcamp = () => {
         axios
@@ -84,7 +85,6 @@ const BootcampProfile = () => {
             })
             .catch((err) => {
                 setIsLoading({ ...isLoading, page: false });
-                setBootcamp(res.data.data);
                 console.log(err);
             });
     }
@@ -148,7 +148,7 @@ const BootcampProfile = () => {
                 notify("Bootcamp deleted successfully");
             }
             setTimeout(() => {
-                window.location.href = "/";
+                navigate("/bootcamps");
             }, 3000);
         } catch (error) {
             setIsLoading({
@@ -174,10 +174,12 @@ const BootcampProfile = () => {
 
         if(!rating || !title || !description.writeReview) {
             toast.error("Please fill all the fields");
+            return;
         }
 
         else if(user.userData.role !== "user") {
             toast.error("Only users can add reviews");
+            return;
         }
 
         try {
@@ -199,7 +201,7 @@ const BootcampProfile = () => {
                 notify("Review added successfully");
             }
             setTimeout(() => {
-                window.location.reload();
+                navigate("/bootcamps");
             }, 3000);
         } catch (error) {
             setIsLoading({
@@ -228,10 +230,12 @@ const BootcampProfile = () => {
 
         if(!title.addCourse || !description.addCourse || !weeks || !price || !minimumSkill || !scholarshipAvailable) {
             toast.error("Please fill all the fields");
+            return;
         }
 
         if(user.userData && bootcamp.user !== user.userData._id){
             toast.error("You are not authorized to add courses to this bootcamp");
+            return;
         }
 
         try {
@@ -250,18 +254,18 @@ const BootcampProfile = () => {
                 setIsLoading({
                     ...isLoading,
                     addCourse: false
-                });
+                });   
                 notify("Course added successfully");
             }
             setTimeout(() => {
-                window.location.reload();
+                navigate("/bootcamps");
             }, 3000);
         } catch (error) {
             setIsLoading({
                 ...isLoading,
                 addCourse: false
             });
-            notify(error.response.data.message);
+            notify("Something went wrong");
         }
     }
 
@@ -369,7 +373,7 @@ const BootcampProfile = () => {
                                             }}
                                             type="text" 
                                             name="title" 
-                                            placeholder="Review Title"
+                                            placeholder="Title"
                                             style={{
                                                 width: "100%",
                                                 fontSize: "1rem",
@@ -390,7 +394,7 @@ const BootcampProfile = () => {
                                             spellCheck="false"
                                             cols="40"
                                             rows="10"
-                                            placeholder="Your Review"
+                                            placeholder="Description"
                                             style={{
                                                 width:"100%",
                                                 fontSize: "1rem",
@@ -445,38 +449,6 @@ const BootcampProfile = () => {
                                         }}
                                     >
                                         <FormLabel>
-                                            Minimum Skill
-                                        </FormLabel>
-                                        <RadioGroup 
-                                            value={minimumSkill}
-                                            onChange={(e) => {
-                                                setMinimumSkill(e.target.value)
-                                            }}
-                                            row
-                                        >
-                                            <FormControlLabel
-                                                value="beginner"
-                                                control={<Radio />}
-                                                label="Beginner"
-                                            />
-                                            <FormControlLabel
-                                                value="intermediate"
-                                                control={<Radio />}
-                                                label="Intermediate"
-                                            />
-                                            <FormControlLabel
-                                                value="advanced"
-                                                control={<Radio />}
-                                                label="Advanced"
-                                            />
-                                        </RadioGroup>   
-                                    </div>
-                                    <div
-                                        style={{
-                                            width: "100%",
-                                        }}
-                                    >
-                                        <FormLabel>
                                             Scholarship Available
                                         </FormLabel>
                                         <RadioGroup 
@@ -497,6 +469,38 @@ const BootcampProfile = () => {
                                                 label="No"
                                             />
                                         </RadioGroup>
+                                        <div
+                                            style={{
+                                                width: "100%",
+                                            }}
+                                        >
+                                            <FormLabel>
+                                                Minimum Skill
+                                            </FormLabel>
+                                            <RadioGroup 
+                                                value={minimumSkill}
+                                                onChange={(e) => {
+                                                    setMinimumSkill(e.target.value)
+                                                }}
+                                                row
+                                            >
+                                                <FormControlLabel
+                                                    value="beginner"
+                                                    control={<Radio />}
+                                                    label="Beginner"
+                                                />
+                                                <FormControlLabel
+                                                    value="intermediate"
+                                                    control={<Radio />}
+                                                    label="Intermediate"
+                                                />
+                                                <FormControlLabel
+                                                    value="advanced"
+                                                    control={<Radio />}
+                                                    label="Advanced"
+                                                />
+                                            </RadioGroup>   
+                                        </div>
                                     </div>
                                     <Button
                                         variant="contained" 
