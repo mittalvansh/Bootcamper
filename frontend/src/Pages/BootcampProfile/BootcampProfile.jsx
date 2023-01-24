@@ -124,8 +124,7 @@ const BootcampProfile = () => {
         });
     }
 
-    const handleDelete = async(e) => {
-        e.preventDefault();
+    const handleDelete = async() => {
         setIsLoading({
             ...isLoading,
             delete: true
@@ -173,11 +172,13 @@ const BootcampProfile = () => {
         }
 
         if(!rating || !title || !description.writeReview) {
+            setIsLoading({ ...isLoading, review: false });
             toast.error("Please fill all the fields");
             return;
         }
 
         else if(user.userData.role !== "user") {
+            setIsLoading({ ...isLoading, review: false });
             toast.error("Only users can add reviews");
             return;
         }
@@ -229,11 +230,13 @@ const BootcampProfile = () => {
         }
 
         if(!title.addCourse || !description.addCourse || !weeks || !price || !minimumSkill || !scholarshipAvailable) {
+            setIsLoading({ ...isLoading, addCourse: false });
             toast.error("Please fill all the fields");
             return;
         }
 
         if(user.userData && bootcamp.user !== user.userData._id){
+            setIsLoading({ ...isLoading, addCourse: false });
             toast.error("You are not authorized to add courses to this bootcamp");
             return;
         }
@@ -311,29 +314,32 @@ const BootcampProfile = () => {
                                 })}
                             </>
                         )}
-                        <div>
-                            <Button
-                                variant="contained" 
-                                type="submit"
-                                sx={btnStyle}
-                                style={{
-                                    margin: "1rem 0",
-                                }}
-                                onClick={() => {
-                                    setIsOpen({
-                                        ...isOpen,
-                                        addCourse: true
-                                    })
-                                }}
-                            >
-                                <span className={styles.icon}>
-                                    <FontAwesomeIcon icon={faPlus} />
-                                </span>
-                                <span>
-                                    Add Course
-                                </span>
-                            </Button>
-                        </div>
+                        {user.userData && user.userData._id === bootcamp.user && (
+
+                            <div>
+                                <Button
+                                    variant="contained" 
+                                    type="submit"
+                                    sx={btnStyle}
+                                    style={{
+                                        margin: "1rem 0",
+                                    }}
+                                    onClick={() => {
+                                        setIsOpen({
+                                            ...isOpen,
+                                            addCourse: true
+                                        })
+                                    }}
+                                >
+                                    <span className={styles.icon}>
+                                        <FontAwesomeIcon icon={faPlus} />
+                                    </span>
+                                    <span>
+                                        Add Course
+                                    </span>
+                                </Button>
+                            </div>
+                        )}
                         <Dialog
                             open={isOpen.addCourse}
                             onClose={() => {
@@ -595,25 +601,27 @@ const BootcampProfile = () => {
                             </Dialog>
                         </>
                         )}
-                        <div 
-                            className={styles.review}
-                            onClick={() => {
-                                setIsOpen({
-                                    ...isOpen,
-                                    writeReview: true
-                                })
-                            }}
-                        >
-                            <span className={styles.icon}>
-                                <FontAwesomeIcon 
-                                    icon={faPen} 
-                                    style={{
-                                        marginRight: "0.5rem",
-                                    }}
-                                />
-                            </span>
-                            <span className={styles.text}>Write a Review</span>
-                        </div>
+                        {user.userData && user.userData.role === "user" && (
+                            <div 
+                                className={styles.review}
+                                onClick={() => {
+                                    setIsOpen({
+                                        ...isOpen,
+                                        writeReview: true
+                                    })
+                                }}
+                            >
+                                <span className={styles.icon}>
+                                    <FontAwesomeIcon 
+                                        icon={faPen} 
+                                        style={{
+                                            marginRight: "0.5rem",
+                                        }}
+                                    />
+                                </span>
+                                <span className={styles.text}>Write a Review</span>
+                            </div>
+                        )}
                         <Dialog
                             open={isOpen.writeReview}
                             onClose={() => {

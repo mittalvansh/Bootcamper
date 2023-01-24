@@ -82,7 +82,7 @@ const Bootcamps = () => {
                 <div className={styles.leftSide}>
                     <form className={styles.location} onSubmit={handleLocationSubmit}>
                         <label>By Location</label>
-                        <div className={styles.fields}>
+                        <div>
                             <TextField
                                 type='text'
                                 label='Miles From'

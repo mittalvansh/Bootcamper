@@ -25,7 +25,7 @@ const BootcampCard = ({ bootcamp }) => {
                     </p>
                     <div>
                         <span className={styles.text}>Publisher : </span>
-                        <span>John Doe</span>
+                        <span>{bootcamp.user.name}</span>
                     </div>
                 </div>
                 <div 

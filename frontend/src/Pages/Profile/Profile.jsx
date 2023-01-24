@@ -57,14 +57,6 @@ const Profile = () => {
                                 >
                                     <Link to='/createbootcamp'>Create BootCamp</Link>
                                 </Button>
-                                <Button 
-                                    variant="contained" 
-                                    type="submit"
-                                    sx={btnStyle}
-                                    className={styles.profile}
-                                >
-                                    Edit Profile
-                                </Button>
                             </div>
                         }
                     </div>
