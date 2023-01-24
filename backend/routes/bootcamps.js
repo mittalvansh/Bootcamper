@@ -27,7 +27,7 @@ router.use('/:bootcampId/reviews', reviewRouter);
 
 router
     .route('/')
-    .get(advancedResults(Bootcamp, 'courses'), getBootcamps)
+    .get(advancedResults(Bootcamp, 'user'), getBootcamps)
     .post(protect, authorize('publisher', 'admin'), createBootcamp);
 
 router
