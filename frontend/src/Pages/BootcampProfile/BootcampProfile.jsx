@@ -1,7 +1,6 @@
 import React,{useState, useEffect, useContext} from "react";
 import styles from './BootcampProfile.module.scss';
 import Layout from "../../components/Layout/Layout";
-import Image from "../../assets/Demo.png";
 import CourseCard from "../../components/CourseCard/CourseCard";
 import ReviewCard from "../../components/ReviewCard/ReviewCard";
 import axios from "axios";
@@ -28,6 +27,7 @@ import { Button,
     FormLabel,
 } from "@mui/material";
 import AuthContext from "../../context/Auth";
+import FileUpload from "../../components/FileUpload/FileUpload";
 
 const btnStyle = {
     width: "100%",
@@ -315,7 +315,6 @@ const BootcampProfile = () => {
                             </>
                         )}
                         {user.userData && user.userData._id === bootcamp.user && (
-
                             <div>
                                 <Button
                                     variant="contained" 
@@ -537,7 +536,11 @@ const BootcampProfile = () => {
                     </div>
                     <div className={styles.otherDetails}>
                         <div className={styles.bootcampImage}>
-                            <img src={Image} alt="" />
+                            {bootcamp.photo ? (
+                                <img src={bootcamp.photo} alt="" />
+                            ) : (
+                                <FileUpload />
+                            )}
                         </div>
                         {reviews.length !== 0 && (
                         <>
