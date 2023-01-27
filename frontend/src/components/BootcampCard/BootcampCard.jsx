@@ -1,13 +1,12 @@
 import React from "react";
 import styles from './BootcampCard.module.scss';
-import Img from '../../assets/Demo.png';
 import {Link} from 'react-router-dom';
 
 const BootcampCard = ({ bootcamp }) => {
     return (
         <div className={styles.card}>
             <img 
-                src={Img}  
+                src={bootcamp.photo}  
                 alt=""
                 width="360px"
                 height="220px" 

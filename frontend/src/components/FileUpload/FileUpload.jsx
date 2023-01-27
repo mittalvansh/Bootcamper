@@ -27,7 +27,7 @@ function FileUpload(props) {
 
     return (
         <>
-            <ToastContainer />
+            <ToastContainer toastStyle={{ backgroundColor: "#262626", color: "#fff" }}/>
             {!props.file ?
                 <div className={styles.fileCard}>
                     <div className={styles.fileInputs}>

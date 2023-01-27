@@ -7,7 +7,7 @@
     background-color: #edf2f7;
     min-width: 380px;
     min-height: 230px;
-    border-radius: 4px;
+    border-radius: 8px;
 
     .fileInputs {
         position: relative;
@@ -81,9 +81,7 @@
 }
 
 .image {
-    border: 3px dashed #cbd5e0;
     background-color: #edf2f7;
-    width: 60%;
     min-width: 20rem;
     min-height: 15rem;
     display: flex;
@@ -95,3 +93,12 @@
         max-height: 30rem;
     }
 }
+
+// @media only screen and (max-width: 1000px){
+//     .fileCard {
+//         min-width: 100%;
+//         min-height: 100%;
+//         padding: 0.5em;
+//         margin: 0.5em 0;  
+//     }      
+// }

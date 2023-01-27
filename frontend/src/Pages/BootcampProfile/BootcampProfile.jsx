@@ -71,7 +71,9 @@ const BootcampProfile = () => {
         review: false,
         delete: false,
         addCourse: false,
+        addfile: false,
     });
+    const [file, setFile] = useState(null);
     const navigate = useNavigate();
 
     const getBootcamp = () => {
@@ -267,6 +269,56 @@ const BootcampProfile = () => {
             setIsLoading({
                 ...isLoading,
                 addCourse: false
+            });
+            notify("Something went wrong");
+        }
+    }
+
+    const handleFile = async() => {
+        setIsLoading({
+            ...isLoading,
+            addfile: true
+        });
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        if(!file) {
+            setIsLoading({ ...isLoading, addfile: false });
+            toast.error("Please select a file");
+            return;
+        }
+
+        if(user.userData && bootcamp.user !== user.userData._id){
+            setIsLoading({ ...isLoading, addfile: false });
+            toast.error("You are not authorized to add files to this bootcamp");
+            return;
+        }
+
+        try {
+            const response = await axios.put(
+                `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/photo`,
+                formData,
+                {
+                    headers: {
+                        "Authorization": user.token
+                    }
+                }
+            );
+            if(response.status === 200) {
+                setIsLoading({
+                    ...isLoading,
+                    addfile: false
+                });
+                notify("File uploaded successfully");
+            }
+            setTimeout(() => {
+                navigate("/bootcamps");
+            }, 3000);
+        } catch (error) { 
+            setIsLoading({
+                ...isLoading,
+                addfile: false
             });
             notify("Something went wrong");
         }
@@ -539,9 +591,31 @@ const BootcampProfile = () => {
                             {bootcamp.photo ? (
                                 <img src={bootcamp.photo} alt="" />
                             ) : (
-                                <FileUpload />
+                                <FileUpload file={file} setFile={setFile} />
                             )}
                         </div>
+                        {!bootcamp.photo && (
+                            <Button
+                                variant="contained" 
+                                style={{
+                                    margin: "1rem 0 0.5rem 0",
+                                    backgroundColor: "#fff",
+                                    color: "#000",
+                                    border: "1px solid #000",
+                                    width: "45%",
+                                    height: "auto",
+                                }}
+                                onClick={() => {
+                                    handleFile();
+                                }}
+                            >
+                                {isLoading.addfile ? (
+                                    <FontAwesomeIcon icon={faSpinner} spin />
+                                ) : (
+                                    "Upload Photo"
+                                )}
+                            </Button>
+                        )}
                         {reviews.length !== 0 && (
                         <>
                             <Button

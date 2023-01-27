@@ -173,20 +173,19 @@ exports.bootcampPhotoUpload = asyncHandler(async(req,res,next)=>{
         return next(new ErrorResponse(`Please upload an image less than ${process.env.MAX_FILE_UPLOAD}`, 400));
     }
 
-        const profile = req.files.file.tempFilePath;
-        console.log(profile);
-        const uploadProfile = await cloudinary.uploader.upload(profile, {
-            upload_preset: 'bootcamper'
-        });
-        console.log(uploadProfile);
-        bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, {photo: uploadProfile.secure_url}, {
-            new: true,
-            runValidators: true
-        });
+    const profile = req.files.file.tempFilePath;
+    console.log(profile);
+    const uploadProfile = await cloudinary.uploader.upload(profile, {
+        upload_preset: 'bootcamper'
+    });
+    console.log(uploadProfile);
+    bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, {photo: uploadProfile.secure_url}, {
+        new: true,
+        runValidators: true
+    });
 
-        res.status(200).json({
-            success: true,
-            data: bootcamp
-        });
-
+    res.status(200).json({
+        success: true,
+        data: bootcamp
+    });
 });
