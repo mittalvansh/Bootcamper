@@ -122,7 +122,13 @@ const Login = () => {
                             sx={btnStyle}
                         >
                             {isLoading ? (
-                                <FontAwesomeIcon icon={faSpinner} spin />
+                                <FontAwesomeIcon 
+                                    icon={faSpinner} 
+                                    style={{
+                                        fontSize: "1.5rem",
+                                    }}
+                                    spin 
+                                />
                             ) : (
                                 "Login"
                             )}

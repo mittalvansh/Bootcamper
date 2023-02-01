@@ -610,7 +610,13 @@ const BootcampProfile = () => {
                                 }}
                             >
                                 {isLoading.addfile ? (
-                                    <FontAwesomeIcon icon={faSpinner} spin />
+                                    <FontAwesomeIcon 
+                                        icon={faSpinner} 
+                                        style={{
+                                            fontSize: "1.5rem",
+                                        }}
+                                        spin 
+                                    />
                                 ) : (
                                     "Upload Photo"
                                 )}
@@ -908,7 +914,13 @@ const BootcampProfile = () => {
                                 }}
                             >
                                 {isLoading.delete ? (
-                                    <FontAwesomeIcon icon={faSpinner} spin />
+                                    <FontAwesomeIcon 
+                                        icon={faSpinner} 
+                                        style={{
+                                            fontSize: "1.5rem",
+                                        }}
+                                        spin 
+                                    />
                                     ) : (
                                     <>
                                         <FontAwesomeIcon icon={faTrash} style={{

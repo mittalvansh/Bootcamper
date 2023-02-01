@@ -40,6 +40,14 @@ const CreateBootcamp = () => {
         e.preventDefault();
         setIsLoading(true);
         data.careers = careers;
+
+        if(data.description.length <= 100)
+        {
+            toast.error("Description is too short!")
+            setIsLoading(false);
+            return;
+        }
+
         try{
             const response = await axios.post(
                 "https://bootcamper-6rl5.onrender.com/api/v1/bootcamps",
@@ -98,7 +106,7 @@ const CreateBootcamp = () => {
                                     required
                                 />   
                             </div>
-                            <Box width='250px' className={styles.items}>
+                            <Box width='245px' className={styles.items}>
                                 <label>Career</label>
                                 <TextField
                                     name="careers" 
@@ -278,7 +286,7 @@ const CreateBootcamp = () => {
                                     {isLoading ? (
                                         <FontAwesomeIcon 
                                             icon={faSpinner} 
-                                            style={{color: "#fff", fontSize: "20px"}}
+                                            style={{color: "#fff", fontSize: "32px"}}
                                             spin 
                                         />
                                     ) : (

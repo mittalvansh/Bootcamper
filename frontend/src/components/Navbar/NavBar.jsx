@@ -4,47 +4,21 @@ import styles from './NavBar.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faBars,
-    faComputerMouse
+    faComputerMouse,
+    faRightFromBracket,
+    faUser,
+    faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import Profile from "../../assets/Avatar.png";
 import AuthContext from "../../context/Auth";
-import { Drawer, Typography, Box, Button } from "@mui/material";
+import { Menu, MenuItem, Typography, Box, Button } from "@mui/material";
 import { styled } from "@mui/material";
-
-const Btn = styled(Button)`
-    font-size: 1rem;
-    font-weight: 600;
-    font-family: Poppins;
-    margin-bottom: 0.5rem;
-    background-color: #262626;
-    color: white;
-    &:hover{
-        background-color: #000;
-    }
-
-    a{
-        text-decoration: none;
-        color: white;
-    }
-`
-
-const Section = styled(Box)`
-    margin-bottom: 0.5rem;
-
-    a{
-        text-decoration: none;
-        color: #262626;
-        text-decoration: underline;
-        font-size: 1.2rem;
-        font-weight: 600;
-        font-family: Poppins;
-    }
-`
 
 const Header = () => {
     const { user } = useContext(AuthContext);
     const [showLinks, setShowLinks] = useState(false);
-    const [isDrawer, setIsDrawer] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+
     return (
         <div className={styles.header}>
             <div className={styles.leftSide}>
@@ -63,39 +37,93 @@ const Header = () => {
                 }>
                     <Link to='/bootcamps' className={styles.bootcamps}>Browse All Bootcamps</Link>
                     {user.isAuthenticated ? (
-                        <img src={Profile} alt="" onClick={() => setIsDrawer(true)}/>
+                        <img 
+                            src={Profile} 
+                            alt=""
+                            onClick={(e) => setAnchorEl(e.currentTarget)}
+                        />
                     ):(
-                        <Link to='/signup' className={styles.login}>SignUp</Link>
+                        <Link 
+                            to='/signup' 
+                            className={styles.login}
+                            id = 'resources-button'
+                        >
+                            SignUp
+                        </Link>
                     )}
-                    <Drawer
-                        anchor="top"
-                        open={isDrawer}
-                        onClose={() => setIsDrawer(false)}
+                    <Menu
+                        id="resources-menu"
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={() => setAnchorEl(null)}
+                        MenuListProps={{
+                            'aria-labelledby': 'resources-button',
+                        }}
                     >
-                        <Box p={2} height='160px' textAlign='center' role='presentation'>
-                            <Typography variant="h6" component='div' className={styles.drawer}>
-                                <Section className={styles.items}>
-                                    <Link to='/profile'>My Profile</Link>
-                                </Section>
-                                <Section className={styles.items}>
-                                    <Link to='/bootcamps'>Browse All Bootcamps</Link>
-                                </Section>
-                                <Btn 
-                                    variant="contained" 
-                                    type="submit"
-                                >
-                                    <Link 
-                                        to='/login' 
-                                        onClick={() => {
-                                            window.localStorage.removeItem("token");
-                                        }}
-                                    >   
-                                        Logout
-                                    </Link>
-                                </Btn>
-                            </Typography>
-                        </Box>
-                    </Drawer>
+                        <MenuItem>
+                            <Link 
+                                to='/profile'
+                                style={{
+                                    textDecoration: 'none',
+                                    color: '#262626',
+                                    fontSize: '1rem',
+                                    fontWeight: '500',
+                                    fontFamily: 'Poppins',
+                                }}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faUser}
+                                    style={{
+                                        marginRight: '0.5rem',
+                                    }}
+                                />
+                                My Profile
+                            </Link>
+                        </MenuItem>
+                        <MenuItem>
+                            <Link 
+                                to='/bootcamps'
+                                style={{
+                                    textDecoration: 'none',
+                                    color: '#262626',
+                                    fontSize: '1rem',
+                                    fontWeight: '500',
+                                    fontFamily: 'Poppins',
+                                }}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faSearch}
+                                    style={{
+                                        marginRight: '0.5rem',
+                                    }}
+                                />
+                                Browse All Bootcamps
+                            </Link>
+                        </MenuItem>
+                        <MenuItem>
+                            <Link
+                                to='/login'
+                                onClick={() => {
+                                    window.localStorage.removeItem("token");
+                                }}
+                                style={{
+                                    textDecoration: 'none',
+                                    color: '#5A5A5A',
+                                    fontSize: '1rem',
+                                    fontWeight: '500',
+                                    fontFamily: 'Poppins',
+                                }}
+                            >
+                                <FontAwesomeIcon 
+                                    icon={faRightFromBracket} 
+                                    style={{
+                                        marginRight: '0.5rem',
+                                    }}
+                                />
+                                Logout
+                            </Link>
+                        </MenuItem>
+                    </Menu>
                 </div>
                 <button onClick={
                     () => setShowLinks(!showLinks)

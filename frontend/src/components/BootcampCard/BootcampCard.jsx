@@ -1,12 +1,13 @@
 import React from "react";
 import styles from './BootcampCard.module.scss';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import ProfileImg from '../../assets/Profile.png';
 
 const BootcampCard = ({ bootcamp }) => {
     return (
         <div className={styles.card}>
             <img 
-                src={bootcamp.photo}  
+                src={bootcamp.photo ? bootcamp.photo : ProfileImg}  
                 alt=""
                 width="360px"
                 height="220px" 
