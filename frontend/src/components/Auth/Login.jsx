@@ -17,7 +17,7 @@ const TextFieldStyle = {
 };
 
 const btnStyle = {
-  width: "75%",
+  width: "100%",
   fontSize: "1rem",
   fontWeight: "bold",
   fontFamily: "Poppins",
