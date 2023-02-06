@@ -408,7 +408,15 @@ const BootcampProfile = () => {
                     <span className={styles.text}>Average Course Cost : </span>
                     <span className={styles.cost}>{bootcamp.averageCost}</span>
                   </div>
-                  <div className={styles.averageRating}>
+                  <div
+                    className={styles.averageRating}
+                    {...(user.userData &&
+                      user.userData.role !== "user" && {
+                        style: {
+                          marginBottom: "4rem",
+                        },
+                      })}
+                  >
                     <span className={styles.ratingText}>Rating : </span>
                     <span className={styles.ratingValue}>
                       {bootcamp.averageRating}
