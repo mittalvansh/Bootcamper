@@ -5,7 +5,7 @@ const AuthContext = React.createContext();
 
 export const AuthProvider = (props) => {
   const [user, setUser] = useState({
-    isAuthenticated: false,
+    isAuthenticated: null,
     token: null,
     userData: null,
   });

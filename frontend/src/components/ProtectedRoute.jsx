@@ -7,8 +7,6 @@ import AuthContext from "../context/Auth";
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
 
-  console.log(user.isAuthenticated);
-
   if (user.isAuthenticated === true) {
     return <>{children}</>;
   }
