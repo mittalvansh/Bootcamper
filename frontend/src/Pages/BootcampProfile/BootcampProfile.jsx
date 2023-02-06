@@ -75,6 +75,7 @@ const BootcampProfile = () => {
     addfile: false,
   });
   const [file, setFile] = useState(null);
+  const [enroll, setEnroll] = useState(false);
   const navigate = useNavigate();
 
   const getBootcamp = () => {
@@ -258,7 +259,6 @@ const BootcampProfile = () => {
           },
         }
       );
-      console.log(response);
       if (response.status === 201) {
         setIsLoading({
           ...isLoading,
@@ -328,6 +328,47 @@ const BootcampProfile = () => {
     }
   };
 
+  const handleEnroll = async () => {
+    if (user.userData.role !== "user") {
+      setIsLoading({ ...isLoading, enroll: false });
+      toast.error("Only users can enroll in courses");
+      return;
+    }
+
+    axios
+      .get(
+        `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/enroll`,
+        {
+          headers: {
+            Authorization: user.token,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          notify("Enrolled successfully");
+          setEnroll(true);
+        }
+      });
+  };
+
+  const checkEnroll = async () => {
+    axios
+      .get(
+        `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/checkenroll`,
+        {
+          headers: {
+            Authorization: user.token,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.data.data === true) {
+          setEnroll(true);
+        }
+      });
+  };
+
   useEffect(() => {
     setIsLoading({
       ...isLoading,
@@ -337,6 +378,10 @@ const BootcampProfile = () => {
     getCourses();
     getReviews();
   }, []);
+
+  useEffect(() => {
+    checkEnroll();
+  }, [user]);
 
   return (
     <>
@@ -369,6 +414,18 @@ const BootcampProfile = () => {
                       {bootcamp.averageRating}
                     </span>
                   </div>
+                  {user.userData && user.userData.role === "user" && (
+                    <Button
+                      variant="outlined"
+                      style={{
+                        margin: "1rem 0",
+                      }}
+                      onClick={handleEnroll}
+                      {...(enroll && { disabled: true })}
+                    >
+                      {enroll ? "Enrolled" : "Enroll"}
+                    </Button>
+                  )}
                   {courses.map((course) => {
                     return (
                       <CourseCard

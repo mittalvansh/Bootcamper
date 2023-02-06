@@ -69,7 +69,6 @@
 
         .averageRating{
             margin-top: 0.5rem;
-            margin-bottom: 4rem;
             
             .ratingText{
                 font-size: 1.2rem;
@@ -121,8 +120,6 @@
 
             &:hover{
                 background-color: rgba(247, 244, 244, 0.7);
-                padding: 0.2rem;
-                border-radius: 4px;
             }
 
             .text{
