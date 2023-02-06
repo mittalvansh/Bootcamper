@@ -139,6 +139,9 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
 
   const bootcamps = await Bootcamp.find({
     location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+  }).populate({
+    path: "user",
+    select: "name",
   });
 
   res.status(200).json({

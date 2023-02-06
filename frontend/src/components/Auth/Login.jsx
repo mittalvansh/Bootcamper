@@ -65,7 +65,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://bootcamper-6rl5.onrender.com/api/v1/auth/login",
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/auth/login`,
         data,
         {
           headers: {

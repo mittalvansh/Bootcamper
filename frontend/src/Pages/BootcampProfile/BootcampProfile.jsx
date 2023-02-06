@@ -80,7 +80,7 @@ const BootcampProfile = () => {
 
   const getBootcamp = () => {
     axios
-      .get(`https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}`)
+      .get(`${import.meta.env.VITE_SERVER_URL}/api/v1/bootcamps/${id}`)
       .then((res) => {
         setIsLoading({ ...isLoading, page: false });
         setBootcamp(res.data.data);
@@ -93,9 +93,7 @@ const BootcampProfile = () => {
 
   const getCourses = () => {
     axios
-      .get(
-        `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/courses`
-      )
+      .get(`${import.meta.env.VITE_SERVER_URL}/api/v1/bootcamps/${id}/courses`)
       .then((res) => {
         setCourses(res.data.data);
       })
@@ -106,9 +104,7 @@ const BootcampProfile = () => {
 
   const getReviews = () => {
     axios
-      .get(
-        `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/reviews`
-      )
+      .get(`${import.meta.env.VITE_SERVER_URL}/api/v1/bootcamps/${id}/reviews`)
       .then((response) => {
         setReviews(response.data.data);
       })
@@ -133,7 +129,7 @@ const BootcampProfile = () => {
     });
     try {
       const response = await axios.delete(
-        `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}`,
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/bootcamps/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -185,7 +181,7 @@ const BootcampProfile = () => {
 
     try {
       const response = await axios.post(
-        `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/reviews`,
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/bootcamps/${id}/reviews`,
         data,
         {
           headers: {
@@ -250,7 +246,7 @@ const BootcampProfile = () => {
 
     try {
       const response = await axios.post(
-        `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/courses`,
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/bootcamps/${id}/courses`,
         data,
         {
           headers: {
@@ -301,7 +297,7 @@ const BootcampProfile = () => {
 
     try {
       const response = await axios.put(
-        `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/photo`,
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/bootcamps/${id}/photo`,
         formData,
         {
           headers: {
@@ -336,14 +332,11 @@ const BootcampProfile = () => {
     }
 
     axios
-      .get(
-        `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/enroll`,
-        {
-          headers: {
-            Authorization: user.token,
-          },
-        }
-      )
+      .get(`${import.meta.env.VITE_SERVER_URL}/api/v1/bootcamps/${id}/enroll`, {
+        headers: {
+          Authorization: user.token,
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           notify("Enrolled successfully");
@@ -355,7 +348,7 @@ const BootcampProfile = () => {
   const checkEnroll = async () => {
     axios
       .get(
-        `https://bootcamper-6rl5.onrender.com/api/v1/bootcamps/${id}/checkenroll`,
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/bootcamps/${id}/checkenroll`,
         {
           headers: {
             Authorization: user.token,

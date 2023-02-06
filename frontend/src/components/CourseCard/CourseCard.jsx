@@ -27,7 +27,7 @@ const CourseCard = ({ course, bootcamp }) => {
     setIsLoading(true);
     try {
       const res = await axios.delete(
-        `https://bootcamper-6rl5.onrender.com/api/v1/courses/${course._id}`,
+        `${import.meta.env.VITE_SERVER_URL}/api/v1/courses/${course._id}`,
         {
           headers: {
             "Content-Type": "application/json",

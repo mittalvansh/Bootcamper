@@ -14,7 +14,7 @@ export const AuthProvider = (props) => {
     try {
       if (token) {
         const response = await axios.get(
-          "https://bootcamper-6rl5.onrender.com/api/v1/auth/me",
+          `${import.meta.env.VITE_SERVER_URL}/api/v1/auth/me`,
           {
             headers: {
               "Content-Type": "application/json",

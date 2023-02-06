@@ -22,33 +22,28 @@
     }
 }
 
-form{
+.info{
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    padding-inline: 5rem;
 
-    .searchBars{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .items{
-            margin-right: 1rem;
-        }
+    p{
+        margin: 0 1rem;
+        font-size: 1.5rem;
+        color: gray;
     }
 }
 
-@media only screen and (max-width: 810px){
-    form{
-        .searchBars{
-            flex-direction: column;
+@media screen and (max-width: 768px){
+    .info{
+        flex-direction: column;
+        text-align: start;
+        padding-inline: 0;
 
-            .items{
-                margin-bottom: 1rem;
-                margin-right: 0 !important;
-            }
+        p{
+            font-size: 1.2rem;
         }
     }
 }
-
