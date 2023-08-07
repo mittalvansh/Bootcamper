@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { TextField, Button } from "@mui/material";
 import Layout from "../../components/Layout/Layout";
+import SkeletonCard from "../../components/SkeletonCard/SkeletonCard";
 
 const btnStyle = {
   fontSize: "1rem",
@@ -136,12 +137,10 @@ const Bootcamps = () => {
         </div>
         <div className={styles.rightSide}>
           {isLoading ? (
-            <div className={styles.spinner}>
-              <FontAwesomeIcon
-                icon={faSpinner}
-                spin
-                className={styles.loader}
-              />
+            <div>
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
             </div>
           ) : (
             bootcamps.map((bootcamp) => {

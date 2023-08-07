@@ -123,10 +123,7 @@ const BootcampProfile = () => {
   }
 
   const handleDelete = async () => {
-    setIsLoading({
-      ...isLoading,
-      delete: true,
-    });
+    setIsLoading({ ...isLoading, delete: true });
     try {
       const response = await axios.delete(
         `${import.meta.env.VITE_SERVER_URL}/api/v1/bootcamps/${id}`,
@@ -138,37 +135,26 @@ const BootcampProfile = () => {
         }
       );
       if (response.status === 200) {
-        setIsLoading({
-          ...isLoading,
-          delete: false,
-        });
+        setIsLoading({ ...isLoading, delete: false });
         notify("Bootcamp deleted successfully");
       }
       setTimeout(() => {
         navigate("/bootcamps");
       }, 3000);
     } catch (error) {
-      setIsLoading({
-        ...isLoading,
-        delete: false,
-      });
+      setIsLoading({ ...isLoading, delete: false });
       notify("Something went wrong");
     }
   };
 
   const handleReview = async (e) => {
     e.preventDefault();
-    setIsLoading({
-      ...isLoading,
-      review: true,
-    });
-
+    setIsLoading({ ...isLoading, review: true });
     const data = {
       title: title.writeReview,
       text: description.writeReview,
       rating: rating,
     };
-
     if (!rating || !title || !description.writeReview) {
       setIsLoading({ ...isLoading, review: false });
       toast.error("Please fill all the fields");
@@ -191,30 +177,21 @@ const BootcampProfile = () => {
         }
       );
       if (response.status === 201) {
-        setIsLoading({
-          ...isLoading,
-          review: false,
-        });
+        setIsLoading({ ...isLoading, review: false });
         notify("Review added successfully");
       }
       setTimeout(() => {
         navigate("/bootcamps");
       }, 3000);
     } catch (error) {
-      setIsLoading({
-        ...isLoading,
-        review: false,
-      });
+      setIsLoading({ ...isLoading, review: false });
       notify("Something went wrong");
     }
   };
 
   const handleCourse = async (e) => {
     e.preventDefault();
-    setIsLoading({
-      ...isLoading,
-      addCourse: true,
-    });
+    setIsLoading({ ...isLoading, addCourse: true });
 
     const data = {
       title: title.addCourse,
@@ -256,29 +233,20 @@ const BootcampProfile = () => {
         }
       );
       if (response.status === 201) {
-        setIsLoading({
-          ...isLoading,
-          addCourse: false,
-        });
+        setIsLoading({ ...isLoading, addCourse: false });
         notify("Course added successfully");
       }
       setTimeout(() => {
         navigate("/bootcamps");
       }, 3000);
     } catch (error) {
-      setIsLoading({
-        ...isLoading,
-        addCourse: false,
-      });
+      setIsLoading({ ...isLoading, addCourse: false });
       notify("Something went wrong");
     }
   };
 
   const handleFile = async () => {
-    setIsLoading({
-      ...isLoading,
-      addfile: true,
-    });
+    setIsLoading({ ...isLoading, addfile: true });
 
     const formData = new FormData();
     formData.append("file", file);
@@ -306,20 +274,14 @@ const BootcampProfile = () => {
         }
       );
       if (response.status === 200) {
-        setIsLoading({
-          ...isLoading,
-          addfile: false,
-        });
+        setIsLoading({ ...isLoading, addfile: false });
         notify("File uploaded successfully");
       }
       setTimeout(() => {
         navigate("/bootcamps");
       }, 3000);
     } catch (error) {
-      setIsLoading({
-        ...isLoading,
-        addfile: false,
-      });
+      setIsLoading({ ...isLoading, addfile: false });
       notify("Something went wrong");
     }
   };
@@ -363,10 +325,7 @@ const BootcampProfile = () => {
   };
 
   useEffect(() => {
-    setIsLoading({
-      ...isLoading,
-      page: true,
-    });
+    setIsLoading({ ...isLoading, page: true });
     getBootcamp();
     getCourses();
     getReviews();
@@ -391,67 +350,52 @@ const BootcampProfile = () => {
             <div className={styles.bootcampDetails}>
               <p>{bootcamp.name}</p>
               <p className={styles.description}>{bootcamp.description}</p>
-              {courses.length === 0 ? (
-                <div className={styles.noCourses}>
-                  <p>No courses available</p>
+              <>
+                <div className={styles.averageCost}>
+                  <span className={styles.text}>Average Course Cost : </span>
+                  <span className={styles.cost}>{bootcamp.averageCost}</span>
                 </div>
-              ) : (
-                <>
-                  <div className={styles.averageCost}>
-                    <span className={styles.text}>Average Course Cost : </span>
-                    <span className={styles.cost}>{bootcamp.averageCost}</span>
-                  </div>
-                  <div
-                    className={styles.averageRating}
-                    {...(user.userData &&
-                      user.userData.role !== "user" && {
-                        style: {
-                          marginBottom: "4rem",
-                        },
-                      })}
+                <div
+                  className={styles.averageRating}
+                  {...(user.userData &&
+                    user.userData.role !== "user" && {
+                      style: { marginBottom: "4rem" },
+                    })}
+                >
+                  <span className={styles.ratingText}>Rating : </span>
+                  <span className={styles.ratingValue}>
+                    {bootcamp.averageRating ? bootcamp.averageRating : "N/A"}
+                  </span>
+                </div>
+                {user.userData && user.userData.role === "user" && (
+                  <Button
+                    variant="outlined"
+                    style={{ margin: "1rem 0" }}
+                    onClick={handleEnroll}
+                    {...(enroll && { disabled: true })}
                   >
-                    <span className={styles.ratingText}>Rating : </span>
-                    <span className={styles.ratingValue}>
-                      {bootcamp.averageRating}
-                    </span>
-                  </div>
-                  {user.userData && user.userData.role === "user" && (
-                    <Button
-                      variant="outlined"
-                      style={{
-                        margin: "1rem 0",
-                      }}
-                      onClick={handleEnroll}
-                      {...(enroll && { disabled: true })}
-                    >
-                      {enroll ? "Enrolled" : "Enroll"}
-                    </Button>
-                  )}
-                  {courses.map((course) => {
-                    return (
-                      <CourseCard
-                        course={course}
-                        bootcamp={bootcamp}
-                        key={course._id}
-                      />
-                    );
-                  })}
-                </>
-              )}
+                    {enroll ? "Enrolled" : "Enroll"}
+                  </Button>
+                )}
+                {courses.map((course) => {
+                  return (
+                    <CourseCard
+                      course={course}
+                      bootcamp={bootcamp}
+                      key={course._id}
+                    />
+                  );
+                })}
+              </>
               {user.userData && user.userData._id === bootcamp.user && (
                 <div>
                   <Button
                     variant="contained"
                     type="submit"
                     sx={btnStyle}
-                    style={{
-                      margin: "1rem 0",
-                    }}
+                    style={{ margin: "1rem 0" }}
                     onClick={() => {
-                      setIsOpen({
-                        ...isOpen,
-                        addCourse: true,
-                      });
+                      setIsOpen({ ...isOpen, addCourse: true });
                     }}
                   >
                     <span className={styles.icon}>
@@ -464,10 +408,7 @@ const BootcampProfile = () => {
               <Dialog
                 open={isOpen.addCourse}
                 onClose={() => {
-                  setIsOpen({
-                    ...isOpen,
-                    addCourse: false,
-                  });
+                  setIsOpen({ ...isOpen, addCourse: false });
                 }}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
@@ -485,18 +426,11 @@ const BootcampProfile = () => {
                     }}
                     onSubmit={handleCourse}
                   >
-                    <div
-                      style={{
-                        width: "100%",
-                      }}
-                    >
+                    <div style={{ width: "100%" }}>
                       <input
                         value={title.addCourse}
                         onChange={(e) => {
-                          setTitle({
-                            ...title,
-                            addCourse: e.target.value,
-                          });
+                          setTitle({ ...title, addCourse: e.target.value });
                         }}
                         type="text"
                         name="title"
@@ -530,11 +464,7 @@ const BootcampProfile = () => {
                         }}
                       />
                     </div>
-                    <div
-                      style={{
-                        width: "100%",
-                      }}
-                    >
+                    <div style={{ width: "100%" }}>
                       <input
                         value={weeks}
                         onChange={(e) => {
@@ -550,11 +480,7 @@ const BootcampProfile = () => {
                         }}
                       />
                     </div>
-                    <div
-                      style={{
-                        width: "100%",
-                      }}
-                    >
+                    <div style={{ width: "100%" }}>
                       <input
                         value={price}
                         onChange={(e) => {
@@ -570,11 +496,7 @@ const BootcampProfile = () => {
                         }}
                       />
                     </div>
-                    <div
-                      style={{
-                        width: "100%",
-                      }}
-                    >
+                    <div style={{ width: "100%" }}>
                       <FormLabel>Scholarship Available</FormLabel>
                       <RadioGroup
                         value={scholarshipAvailable}
@@ -594,11 +516,7 @@ const BootcampProfile = () => {
                           label="No"
                         />
                       </RadioGroup>
-                      <div
-                        style={{
-                          width: "100%",
-                        }}
-                      >
+                      <div style={{ width: "100%" }}>
                         <FormLabel>Minimum Skill</FormLabel>
                         <RadioGroup
                           value={minimumSkill}
@@ -630,9 +548,7 @@ const BootcampProfile = () => {
                         <FontAwesomeIcon
                           icon={faSpinner}
                           spin
-                          style={{
-                            fontSize: "1.5rem",
-                          }}
+                          style={{ fontSize: "1.5rem" }}
                         />
                       ) : (
                         "Add Course"
@@ -643,10 +559,7 @@ const BootcampProfile = () => {
                 <DialogActions>
                   <Button
                     onClick={() => {
-                      setIsOpen({
-                        ...isOpen,
-                        addCourse: false,
-                      });
+                      setIsOpen({ ...isOpen, addCourse: false });
                     }}
                   >
                     Cancel
@@ -666,11 +579,11 @@ const BootcampProfile = () => {
                 <Button
                   variant="contained"
                   style={{
-                    margin: "1rem 0 0.5rem 0",
+                    margin: "1rem 0",
                     backgroundColor: "#fff",
                     color: "#000",
                     border: "1px solid #000",
-                    width: "45%",
+                    width: "100%",
                     height: "auto",
                   }}
                   onClick={() => {
@@ -680,9 +593,7 @@ const BootcampProfile = () => {
                   {isLoading.addfile ? (
                     <FontAwesomeIcon
                       icon={faSpinner}
-                      style={{
-                        fontSize: "1.5rem",
-                      }}
+                      style={{ fontSize: "1.5rem" }}
                       spin
                     />
                   ) : (
@@ -696,21 +607,14 @@ const BootcampProfile = () => {
                     variant="contained"
                     sx={btnStyle}
                     onClick={() => {
-                      setIsOpen({
-                        ...isOpen,
-                        readReview: true,
-                      });
+                      setIsOpen({ ...isOpen, readReview: true });
                     }}
-                    style={{
-                      margin: "1rem 0 0.5rem 0",
-                    }}
+                    style={{ margin: "1rem 0 0.5rem 0" }}
                   >
                     <span>
                       <FontAwesomeIcon
                         icon={faComments}
-                        style={{
-                          marginRight: "0.5rem",
-                        }}
+                        style={{ marginRight: "0.5rem" }}
                       />
                     </span>
                     <span>Read Reviews</span>
@@ -718,10 +622,7 @@ const BootcampProfile = () => {
                   <Dialog
                     open={isOpen.readReview}
                     onClose={() => {
-                      setIsOpen({
-                        ...isOpen,
-                        readReview: false,
-                      });
+                      setIsOpen({ ...isOpen, readReview: false });
                     }}
                     aria-labelledby="dialog-title"
                     aria-describedby="dialog-description"
@@ -737,10 +638,7 @@ const BootcampProfile = () => {
                     <DialogActions>
                       <Button
                         onClick={() => {
-                          setIsOpen({
-                            ...isOpen,
-                            readReview: false,
-                          });
+                          setIsOpen({ ...isOpen, readReview: false });
                         }}
                       >
                         Cancel
@@ -753,18 +651,13 @@ const BootcampProfile = () => {
                 <div
                   className={styles.review}
                   onClick={() => {
-                    setIsOpen({
-                      ...isOpen,
-                      writeReview: true,
-                    });
+                    setIsOpen({ ...isOpen, writeReview: true });
                   }}
                 >
                   <span className={styles.icon}>
                     <FontAwesomeIcon
                       icon={faPen}
-                      style={{
-                        marginRight: "0.5rem",
-                      }}
+                      style={{ marginRight: "0.5rem" }}
                     />
                   </span>
                   <span className={styles.text}>Write a Review</span>
@@ -773,10 +666,7 @@ const BootcampProfile = () => {
               <Dialog
                 open={isOpen.writeReview}
                 onClose={() => {
-                  setIsOpen({
-                    ...isOpen,
-                    writeReview: false,
-                  });
+                  setIsOpen({ ...isOpen, writeReview: false });
                 }}
                 aria-labelledby="dialog-title"
                 aria-describedby="dialog-description"
@@ -832,11 +722,7 @@ const BootcampProfile = () => {
                         step="1"
                       />
                     </div>
-                    <div
-                      style={{
-                        width: "100%",
-                      }}
-                    >
+                    <div style={{ width: "100%" }}>
                       <input
                         value={title.writeReview}
                         onChange={(e) => {
@@ -888,10 +774,7 @@ const BootcampProfile = () => {
                 <DialogActions>
                   <Button
                     onClick={() => {
-                      setIsOpen({
-                        ...isOpen,
-                        writeReview: false,
-                      });
+                      setIsOpen({ ...isOpen, writeReview: false });
                     }}
                   >
                     Cancel
@@ -899,12 +782,7 @@ const BootcampProfile = () => {
                 </DialogActions>
               </Dialog>
               <div className={styles.website}>
-                <a
-                  href={bootcamp.website}
-                  style={{
-                    textDecoration: "none",
-                  }}
-                >
+                <a href={bootcamp.website} style={{ textDecoration: "none" }}>
                   <FontAwesomeIcon
                     icon={faGlobe}
                     style={{
@@ -977,18 +855,14 @@ const BootcampProfile = () => {
                   {isLoading.delete ? (
                     <FontAwesomeIcon
                       icon={faSpinner}
-                      style={{
-                        fontSize: "1.5rem",
-                      }}
+                      style={{ fontSize: "1.5rem" }}
                       spin
                     />
                   ) : (
                     <>
                       <FontAwesomeIcon
                         icon={faTrash}
-                        style={{
-                          marginRight: "0.5rem",
-                        }}
+                        style={{ marginRight: "0.5rem" }}
                       />
                       <span>Delete Bootcamp</span>
                     </>

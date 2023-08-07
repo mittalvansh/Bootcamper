@@ -1,92 +1,92 @@
-.card{
+.card {
+  display: flex;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  margin-inline: 10%;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 2px 0px 10px rgba(142, 140, 140, 0.5);
+  transition: 0.1s ease-in-out;
+  position: relative;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  img {
+    border-radius: 8px 0 0 8px;
+  }
+
+  .details {
     display: flex;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    margin-inline: 10%;
-    margin-top: 2rem;
-    margin-bottom: 0.5rem;
-    box-shadow: 2px 0px 10px rgba(142, 140, 140, 0.5);
-    transition: 0.1s ease-in-out;
-    position: relative;
+    flex-direction: column;
+    margin-left: 2rem;
 
-    &:hover {
-        transform: scale(1.02);
-    }
+    .info {
+      .name {
+        margin-top: 2.5rem;
 
-    img{
-        border-radius: 8px 0 0 8px;
-    }
-
-    .details{
-        display: flex;
-        flex-direction: column;
-        margin-left: 2rem;
-
-        .info{
-            .name {
-                margin-top: 2.5rem;
-        
-                p {
-                    font-size: 1.5rem;
-                    font-weight: 600;
-                }
-            }
-
-            .city{
-                position: absolute;
-                background-color: #262626;
-                color: white;
-                right: 0;
-                top: 0;
-                padding: 0.5rem 1rem;
-                border-radius: 0 8px 0 0;
-            }
-    
-            p{
-                margin-bottom: 0.5rem;
-            }
-    
-            .text{
-                font-weight: 600;
-            }
+        p {
+          font-size: 1.5rem;
+          font-weight: 600;
         }
+      }
 
-        .links{
-            display: flex;
+      .city {
+        position: absolute;
+        background-color: #262626;
+        color: white;
+        right: 0;
+        top: 0;
+        padding: 0.5rem 1rem;
+        border-radius: 0 8px 0 0;
+      }
 
-            .profile{
-                margin-top: 1rem;
+      p {
+        margin-bottom: 0.5rem;
+      }
 
-                .txt{
-                    font-size: 1.2rem;
-                    color: gray;
-                }
-            }
-        }
+      .text {
+        font-weight: 600;
+      }
     }
+
+    .links {
+      display: flex;
+
+      .profile {
+        margin-top: 1rem;
+
+        .txt {
+          font-size: 1.2rem;
+          color: gray;
+        }
+      }
+    }
+  }
 }
 
-@media only screen and (max-width: 670px){
-    .card{
-        flex-direction: column;
-        width: 80vw;
+@media only screen and (max-width: 670px) {
+  .card {
+    flex-direction: column;
+    width: 80vw;
 
-        img{
-            width: 80vw !important;
-            border-radius: 8px 8px 0 0;
-        }
-
-        .details{
-            .info{
-                .name{
-                    margin-top: 1rem !important;
-
-                    p {
-                        font-size: 1.2rem;
-                        font-weight: 700;
-                    }
-                }
-            }
-        }
+    img {
+      width: 80vw !important;
+      border-radius: 8px 8px 0 0;
     }
+
+    .details {
+      .info {
+        .name {
+          margin-top: 1rem !important;
+
+          p {
+            font-size: 1.2rem;
+            font-weight: 700;
+          }
+        }
+      }
+    }
+  }
 }
