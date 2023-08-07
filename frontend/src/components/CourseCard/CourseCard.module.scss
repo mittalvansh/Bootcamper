@@ -1,63 +1,63 @@
-.card{
-    border: 2px solid rgba(0,0,0,0.1);
-    width: 100%;
-    margin-bottom: 1.5rem;
+.card {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin-bottom: 1.5rem;
 
-    .course{
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 2rem;
-        background-color: #262626;
-        padding: 0.2rem 0;
-        .name{
-            margin-left: 0.5rem;
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #fff;
-        }
+  .course {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2rem;
+    background-color: #262626;
+    padding: 0.2rem 0;
+    .name {
+      margin-left: 0.5rem;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #fff;
     }
-    .details{
-        padding-left: 1rem;
+  }
+  .details {
+    padding-left: 1rem;
 
-        .duration{
-            margin-top: 1rem;
+    .duration {
+      margin-top: 1rem;
 
-            .text{
-                font-size: 1.2rem;
-                font-weight: 500;
-                color: #262626;
-            }
+      .text {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #262626;
+      }
 
-            .time{
-                font-size: 1.2rem;
-                font-weight: 400;
-                color: #262626;
-            }
-        }
-
-        .description{
-            padding-right: 0.2rem;
-            margin-top: 1rem;
-            font-size: 1rem;
-            font-weight: 400;
-            color: #262626;
-        }
-
-        .otherDetails{
-            margin: 1rem 0;
-            padding-right: 1rem;
-
-            .detail{
-                border: 1px solid rgba(0,0,0,0.1);
-                padding: 0.5rem;
-            }
-        }
+      .time {
+        font-size: 1.2rem;
+        font-weight: 400;
+        color: #262626;
+      }
     }
+
+    .description {
+      padding-right: 0.2rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+      font-weight: 400;
+      color: #262626;
+    }
+
+    .otherDetails {
+      margin: 1rem 0;
+      padding-right: 1rem;
+
+      .detail {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 0.5rem;
+      }
+    }
+  }
 }
 
-@media only screen and (min-width: 1000px){
-    .card{
-        width: 100%;
-    }
+@media only screen and (min-width: 1000px) {
+  .card {
+    width: 100%;
+  }
 }
