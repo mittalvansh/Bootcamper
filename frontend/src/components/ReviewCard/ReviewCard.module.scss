@@ -1,0 +1,45 @@
+.reviewCard {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin-bottom: 1.5rem;
+
+  .review {
+    background-color: #262626;
+    padding: 0.2rem 0;
+
+    .title {
+      margin-left: 0.5rem;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #fff;
+    }
+  }
+
+  .details {
+    padding-left: 1rem;
+
+    .rating {
+      margin-top: 1rem;
+
+      .text {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #262626;
+      }
+
+      .count {
+        font-size: 1.2rem;
+        font-weight: 400;
+        color: #262626;
+      }
+    }
+
+    .description {
+      padding-right: 0.2rem;
+      margin: 1rem 0;
+      font-size: 1rem;
+      font-weight: 400;
+      color: #262626;
+    }
+  }
+}
