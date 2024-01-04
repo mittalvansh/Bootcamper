@@ -1,0 +1,20 @@
+.card {
+  box-shadow: 2px 0px 10px rgba(142, 140, 140, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  transition: 0.1s ease-in-out;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.city {
+  background-color: #262626;
+  color: white;
+  right: 0;
+  top: 0;
+  padding: 0.5rem 1rem;
+  border-radius: 0 8px 0 0;
+}

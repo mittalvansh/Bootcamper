@@ -1,30 +1,42 @@
-import React from "react";
-import "./App.scss";
+import "@mantine/core/styles.css";
+import { MantineProvider } from "@mantine/core";
+import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
-import { Routes, Route, useLocation } from "react-router-dom";
-import Home from "./Pages/Home/Home";
-import Login from "./components/Auth/Login";
-import SignUp from "./components/Auth/SignUp";
-import Bootcamps from "./Pages/Bootcamps/Bootcamps";
-import Profile from "./Pages/Profile/Profile";
-import CreateBootcamp from "./Pages/CreateBootcamp/CreateBootcamp";
-import BootcampProfile from "./Pages/BootcampProfile/BootcampProfile";
-import { AnimatePresence } from "framer-motion";
+import MainAppShell from "./components/MainAppShell";
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import SignUp from "./pages/SignUp";
+import Login from "./pages/Login";
+import Bootcamps from "./pages/Bootcamps";
+import Profile from "./pages/Profile";
+import CreateBootcamp from "./pages/CreateBootcamp";
+import BootcampProfile from "./pages/BootcampProfile";
 
 function App() {
-  const location = useLocation();
   return (
-    <AnimatePresence>
+    <MantineProvider>
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/bootcamps" element={<Bootcamps />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/createbootcamp" element={<CreateBootcamp />} />
-        <Route path="/bootcamp-profile/:id" element={<BootcampProfile />} />
+        <Route
+          path="/*"
+          element={
+            <MainAppShell>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/bootcamps" element={<Bootcamps />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/createbootcamp" element={<CreateBootcamp />} />
+                <Route
+                  path="/bootcamp-profile/:id"
+                  element={<BootcampProfile />}
+                />
+              </Routes>
+            </MainAppShell>
+          }
+        />
       </Routes>
-    </AnimatePresence>
+    </MantineProvider>
   );
 }
 
