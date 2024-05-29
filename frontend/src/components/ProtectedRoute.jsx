@@ -1,36 +1,20 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { Flex, Loader } from "@mantine/core";
 import AuthContext from "../context/Auth";
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
 
-  if (user.isAuthenticated === true) {
+  if (user?.isAuthenticated === true) {
     return <>{children}</>;
-  }
-  if (user.isAuthenticated === false) {
+  } else if (user?.isAuthenticated === false) {
     return <Navigate to="/login" />;
-  }
-  if (user.isAuthenticated === null) {
+  } else {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <FontAwesomeIcon
-          style={{
-            fontSize: "2rem",
-          }}
-          icon={faSpinner}
-          spin
-        />
-      </div>
+      <Flex justify="center" align="center" h="100vh">
+        <Loader size={40} />
+      </Flex>
     );
   }
 };
